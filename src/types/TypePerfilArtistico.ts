@@ -1,23 +1,26 @@
 import { TypeEvento } from "./TypeEvento";
 
 export type TypePerfilArtistico = {
+    _id: string;
+    icon?: string;
     nome: string;
     descricao: string;
     tipo: 'banda/grupo' | 'artista';
     area: 'musica' | 'teatro';
     linksDoPerfil: TypeLinksPerfil[];
-    localidades: {
+    localidade: {
         localidadePrincipal: TypeLocalidadePerfil;
-        outrasLocalidades: TypeLocalidadePerfil[]
     }
     agenda: null | TypeEvento[]
 }
 
 type TypeLinksPerfil = {
-    nome: string; link: string;
+    nome: 'Spotify' | 'Instagram' | 'X' | 'Facebook' | 'Youtube' | 'Soundcloud' | {outro: {nome: string}}; 
+    link: string;
 }
 
 export type TypeLocalidadePerfil = {
-    nome: string;
+    cidade: string;
+    estado: string;
     link: string;
 }

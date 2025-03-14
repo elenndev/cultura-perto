@@ -1,11 +1,13 @@
 import { Homepage } from '@/@componentes';
 import { ThemeContextProvider } from '@/context/ContextTheme';
+import { getServerSession } from 'next-auth/next';
 
-const Page = () => {
-
-  return (
+const Page = async () => {
+const session = await getServerSession()
+console.log(session)
+return (
     <ThemeContextProvider>
-      <Homepage/>
+        <Homepage/>
     </ThemeContextProvider>
   );
 };
