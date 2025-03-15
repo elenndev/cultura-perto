@@ -3,6 +3,7 @@ import { useThemeContext } from '@/context/ContextTheme';
 import { darkTheme, GlobalStyles, lightTheme } from '@/styles/themeConfig';
 import { ThemeProvider} from 'styled-components';
 import { ThemeToggleButton } from '..';
+import { Button_LogOut } from '../Button_LogOut';
 
 export const Homepage = ()=>{
     const { theme } = useThemeContext();
@@ -14,6 +15,7 @@ export const Homepage = ()=>{
         <GlobalStyles/>
         <div>
         <ThemeToggleButton />
+        <Button_LogOut />
         </div>
     </ThemeProvider>
     );

@@ -1,44 +1,43 @@
 'use client'
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
   const [email, setEmail] = useState("");
+  const router = useRouter()
+
     const [password, setPassword] = useState("");
-    const [isCreatingAccount, setIsCreatingAccount] = useState(false); // Para alternar entre login e criar conta
+    const [isCreatingAccount, setIsCreatingAccount] = useState(false); 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false)
   
-    // Função de handleSubmit para login ou criação de conta
     const handleSubmit = async (e: React.FormEvent) => {
       console.log('evento')
       e.preventDefault();
       setLoading(true)
-      setError(""); // Reseta erros
+      setError(""); 
   
-      // Faz a autenticação ou cria o novo usuário
       const response = await signIn("credentials", {
-          redirect: true,
+          redirect: false,
           callbackUrl: '/',
           email,
           password,
           action: isCreatingAccount ? 'signin' : 'login'      });
   
-      if (response?.error) {
-        console.log('erro idenfiticado: ',response.error)
-        setError(response.error);
+      if (response?.error || response?.status != 200) {
+        console.log('erro idenfiticado: ',response?.error)
+        setError(response?.error ?? "Erro ");
         setLoading(false)
       } else {
-        // Caso a autenticação tenha sucesso, redireciona
-        console.log('its supose to push')
-          }
+      router.push('/')
+    }
       };
   
-    // Função para alternar entre login e criar nova conta
     const toggleCreateAccount = () => {
       setIsCreatingAccount((prev) => !prev);
       setLoading(false)
-      setError(""); // Reseta os erros ao alternar entre os modos
+      setError(""); 
     };
       return(
           <div className="flex justify-center items-center min-h-screen bg-gray-50">
@@ -48,7 +47,6 @@ export default function Page() {
           </h1>
           
           <form onSubmit={handleSubmit}>
-            {/* Campo de Email */}
             <div className="mb-4">
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
                 Email
@@ -64,7 +62,6 @@ export default function Page() {
               />
             </div>
   
-            {/* Campo de Senha */}
             <div className="mb-4">
               <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
                 Senha
@@ -80,7 +77,6 @@ export default function Page() {
               />
             </div>
   
-            {/* Mensagem de erro */}
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
   
             <div className="mb-4">

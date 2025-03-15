@@ -1,9 +1,9 @@
 import { Homepage } from '@/@componentes';
 import { ThemeContextProvider } from '@/context/ContextTheme';
-import { getServerSession } from 'next-auth/next';
+import {getSessionData} from '@/utils/auth'
 
 const Page = async () => {
-const session = await getServerSession()
+const session = await getSessionData()
 console.log(session)
 return (
     <ThemeContextProvider>
