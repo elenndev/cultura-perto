@@ -4,10 +4,10 @@ import {getSessionData} from '@/utils/auth'
 
 const Page = async () => {
 const session = await getSessionData()
-console.log(session)
+console.log('session que vai ser passado como props: ', session)
 return (
     <ThemeContextProvider>
-        <Homepage/>
+        <Homepage session = {session}/>
     </ThemeContextProvider>
   );
 };

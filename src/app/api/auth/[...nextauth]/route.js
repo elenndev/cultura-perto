@@ -22,7 +22,7 @@ async function registrarNovoUser(email, password) {
       return {
         email,
         password,
-        _id: req.data.id,
+        _id: req.data.id
       };
     } else {
       throw new Error("Erro na requisição");
@@ -48,7 +48,7 @@ async function buscarUserDb(email) {
       };
       if (req.data.user.perfilArtisticoId) {
         user = { ...user, perfilArtisticoId: req.data.user.perfilArtisticoId };
-      }
+      } 
       return user;
     } else {
       return null
@@ -75,6 +75,7 @@ export const authOptions = {
             throw new Error("Já existe um usuário");
           } else {
             user = await registrarNovoUser(credentials.email, credentials.password);
+            user.perfilArtisticoId = 'none'
             return user;
           }
         } else {
@@ -83,9 +84,9 @@ export const authOptions = {
           } else {
             const validarSenha = await verificarSenha(credentials.password, user.password);
             if (validarSenha == true) {
-              let sessionUser = { email: user.email, _id: user._id };
+              let sessionUser = { email: user.email, _id: user._id, perfilArtisticoId: 'none'};
               if (user.perfilArtisticoId) {
-                sessionUser = { ...sessionUser, perfilArtisticoId: user.perfilArtisticoId };
+                sessionUser.perfilArtisticoId = user.perfilArtisticoId
               }
               return sessionUser;
             } else {
@@ -102,6 +103,7 @@ export const authOptions = {
   callbacks: {
     async session({ session, token }) {
       session.user.id = token.sub
+      session.user.perfilArtisticoId = token.perfilArtisticoId
       return session;
     },
     async jwt({ token, user }) {
@@ -110,6 +112,7 @@ export const authOptions = {
         token.email = user.email;
         token.picture = null;
         token.sub = user._id;
+        token.perfilArtisticoId = user.perfilArtisticoId
       }
       return token;
     },
