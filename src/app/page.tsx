@@ -1,13 +1,17 @@
 import { Homepage } from '@/@componentes';
 import { ThemeContextProvider } from '@/context/ContextTheme';
 import {getSessionData} from '@/utils/auth'
+import { redirect } from 'next/navigation';
 
 const Page = async () => {
 const session = await getSessionData()
-console.log('session que vai ser passado como props: ', session)
+const user = session?.user as {perfilArtisticoId: string}
+if(user?.perfilArtisticoId == 'none'){
+  redirect('/configurar-perfil')
+}
 return (
     <ThemeContextProvider>
-        <Homepage session = {session}/>
+        <Homepage userSession = {session?.user ?? null}/>
     </ThemeContextProvider>
   );
 };

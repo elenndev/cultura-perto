@@ -4,15 +4,15 @@ import { darkTheme, GlobalStyles, lightTheme } from '@/styles/themeConfig';
 import { ThemeProvider} from 'styled-components';
 import { ThemeToggleButton } from '..';
 import { Button_LogOut } from '../Button_LogOut';
-import { useRouter } from 'next/navigation';
 
 
 type homepageProps<S> = {
-    session: S;
+    userSession: S | null;
 }
-export const Homepage = <S,>({session} :homepageProps<S>)=>{
+export const Homepage = <S,>({userSession} : homepageProps<S> )=>{
     const { theme } = useThemeContext();
-    const router = useRouter()
+    const user = userSession as {_id: string, perfilArtisticoId: string}
+    console.log('user no componente Homepage:', user)
     
     const currentTheme = theme === 'light' ? lightTheme : darkTheme;
     
