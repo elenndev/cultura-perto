@@ -5,8 +5,8 @@ export type TypePerfilArtistico = {
     icon?: string;
     nome: string;
     descricao: string;
-    tipo: 'banda/grupo' | 'artista';
-    area: 'musica' | 'teatro';
+    tipo: 'grupo' | 'individual';
+    area: 'musica' | 'cenica' | 'artesanato';
     linksDoPerfil: TypeLinksPerfil[];
     localidade: {
         localidadePrincipal: TypeLocalidadePerfil;
@@ -14,7 +14,7 @@ export type TypePerfilArtistico = {
     agenda: null | TypeEvento[]
 }
 
-type TypeLinksPerfil = {
+export type TypeLinksPerfil = {
     nome: 'Spotify' | 'Instagram' | 'X' | 'Facebook' | 'Youtube' | 'Soundcloud' | {outro: {nome: string}}; 
     link: string;
 }

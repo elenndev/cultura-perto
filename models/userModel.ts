@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
     perfilArtisticoId:{
         type:String,
     },
+    username: {
+        type: String,
+        required: [true]
+    },
     isverified:{
         type:Boolean,
         default:false,

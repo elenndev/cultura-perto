@@ -10,18 +10,23 @@ async function hashPassword(plainPassword) {
   return bcrypt.hash(plainPassword, saltRounds);
 }
 
-async function registrarNovoUser(email, password) {
+async function registrarNovoUser(email,username, password) {
   const passwordHash = await hashPassword(password);
   try {
     const req = await axios.post(`${url}/api/user/new`, {
       email,
+      username,
       password: passwordHash,
     });
 
     if (req) {
+      if(req.data.user == 'username indisponivel'){
+        return req.data.user
+      }
       return {
         email,
-        password,
+        username,
+        isverified: false,
         _id: req.data.id
       };
     } else {
@@ -44,7 +49,9 @@ async function buscarUserDb(email) {
       let user = {
         _id: req.data.user._id,
         email: req.data.user.email,
+        username: req.data.user.username,
         password: req.data.user.password,
+        isverified: req.data.isverified
       };
       if (req.data.user.perfilArtisticoId) {
         user = { ...user, perfilArtisticoId: req.data.user.perfilArtisticoId };
@@ -65,6 +72,7 @@ export const authOptions = {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "@mail.com" },
+        username: {label: "Username", type: "text", placeholder: 'nomeusuario'},
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -74,7 +82,10 @@ export const authOptions = {
           if (user != null || undefined) {
             throw new Error("Já existe um usuário");
           } else {
-            user = await registrarNovoUser(credentials.email, credentials.password);
+            user = await registrarNovoUser(credentials.email,credentials.username, credentials.password);
+            if(user == 'username indisponivel'){
+              throw new Error("Esse nome de usuário já está sendo utilizado, por favor tente outro")
+            }
             user.perfilArtisticoId = 'none'
             return user;
           }
@@ -84,7 +95,7 @@ export const authOptions = {
           } else {
             const validarSenha = await verificarSenha(credentials.password, user.password);
             if (validarSenha == true) {
-              let sessionUser = { email: user.email, _id: user._id, perfilArtisticoId: 'none'};
+              let sessionUser = { email: user.email, _id: user._id, perfilArtisticoId: 'none', username: user.username, isverified: user.isverified};
               if (user.perfilArtisticoId) {
                 sessionUser.perfilArtisticoId = user.perfilArtisticoId
               }
@@ -103,15 +114,18 @@ export const authOptions = {
   callbacks: {
     async session({ session, token }) {
       session.user.id = token.sub
+      session.user.username =token.username
+      session.user.isverified = token.isverified
       session.user.perfilArtisticoId = token.perfilArtisticoId
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.name = user.email;
-        token.email = user.email;
-        token.picture = null;
-        token.sub = user._id;
+        token.username = user.username
+        token.email = user.email
+        token.picture = null
+        token.sub = user._id
+        token.isverified = user.isverified
         token.perfilArtisticoId = user.perfilArtisticoId
       }
       return token;

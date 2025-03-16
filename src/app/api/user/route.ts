@@ -6,13 +6,11 @@ export async function GET(request: NextRequest){
     try {
         const { searchParams } = new URL(request.url)
         const email = searchParams.get('email')
-        console.log('email::', email)
         await connectMongoDB()
         if(!email){
             throw new Error('Email não identificado no parâmetro')
         }
         const user = await UserDB.findOne({email: email})
-        console.log('user::',user)
 
         const response = NextResponse.json({user: user},{status: 200})
         return response

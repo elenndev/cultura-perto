@@ -6,14 +6,18 @@ export async function POST(request: NextRequest){
     console.log('req api db')
     try {
         await connectMongoDB()
-        const {email, password} = await request.json()
-        console.log('respectivamente email e password', email, password)
+        const {email, username, password} = await request.json()
         
-        if(!email || !password){
+        if(!email || !password || !username){
             throw new Error('Email não identificado no parâmetro')
         }
-        const newUser = await UserDB.create({email, password})
-        console.log('new user na function mongDB:', newUser)
+
+        const checkUsername = await UserDB.findOne({username: username})
+        if (checkUsername){
+            const response = NextResponse.json({user: 'username indisponivel'}, {status: 200})
+            return response
+        }
+        const newUser = await UserDB.create({email, password, username, isverified: false})
 
         if(!newUser){
             throw new Error('Erro ao tentar criar usuário no dn')

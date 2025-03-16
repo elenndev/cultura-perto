@@ -1,3 +1,5 @@
+import ConfigurarPerfil from "@/@componentes/configurar-perfil/ConfigurarPerfil";
+
 export default function Page(){
-    return(<h1>personalizar o perfil!</h1>)
+    return(<><ConfigurarPerfil/></>)
 }
