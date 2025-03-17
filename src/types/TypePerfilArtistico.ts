@@ -22,5 +22,15 @@ export type TypeLinksPerfil = {
 export type TypeLocalidadePerfil = {
     cidade: string;
     estado: string;
-    link: string;
 }
+
+export type Estado = {
+    id: number;
+    sigla: string;
+    nome: string;
+};
+
+export type Cidade = {
+    id: number;
+    nome: string;   
+};

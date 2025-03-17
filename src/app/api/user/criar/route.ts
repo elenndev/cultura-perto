@@ -20,7 +20,7 @@ export async function POST(request: NextRequest){
         const newUser = await UserDB.create({email, password, username, isverified: false})
 
         if(!newUser){
-            throw new Error('Erro ao tentar criar usuário no dn')
+            throw new Error('Erro ao tentar criar usuário no db')
         } else {
             return NextResponse.json({id: newUser._id},{status: 200})
         }

@@ -1,46 +1,82 @@
 'use client'
-
-import { TypeLinksPerfil, TypeLocalidadePerfil, TypePerfilArtistico } from "@/types"
+import { TypeLinksPerfil, TypeLocalidadePerfil } from "@/types"
 import React, { useEffect, useState } from "react"
 import Etapa_TipoENome from "./Etapa_TipoENome";
+import DefinirLocalidade from "./DefinirLocalidade";
+import Etapa_Detalhes from "./Etapa_Detalhes";
+import { ToastContainer } from "react-toastify";
+import { useConfigurarPerfil } from "./useConfigurarPerfil";
+import Modal_Loading from "../modals/Modal_Loading";
 
-type perfilArtisticoConfigurando = Omit<TypePerfilArtistico, "linksDoPerfil" | "localidade"> & {
-    linksDoPerfil: TypeLinksPerfil[] | null;
-    localidade: {localidadePrincipal: TypeLocalidadePerfil} | null
+interface configurarPerfilProps {
+    userId: string;
 }
-export default function ConfigurarPerfil(){
+export default function ConfigurarPerfil(props: configurarPerfilProps){
+    const { salvarPerfilArtistico } = useConfigurarPerfil()
+    //controlar modal
+    const [modalLoadingAberto, setModalLoadingAberto] = useState<false | {content: string}>(false)
+
     const [etapa, setEtapa] = useState(1)
     const [permitirProxEtapa, setPermitirProxEtapa] = useState(false)
     const [localidade, setLocalidade] = useState<{localidadePrincipal: TypeLocalidadePerfil} | null>(null)
+    const [estadoSelecionado, setEstadoSelecionado] = useState<string>("");
+    const [cidadeSelecionada, setCidadeSelecionada] = useState<string>("");
+
+    const [nome, setNome] = useState<string | null>(null)
     const [area, setArea] = useState<null  |'musica'| 'cenica' |'artesanato'>(null)
-    const [artistaInfos, setArtistaInfos] = useState<perfilArtisticoConfigurando>({
-        _id: '',
-        icon: '',
-        nome: '',
-        descricao: '',
-        tipo: 'individual',
-        area: 'artesanato',
-        linksDoPerfil: null,
-        localidade: null,
-        agenda: null
-    })
+    const [tipo, setTipo] = useState<null | 'grupo' | 'individual'>(null)
+    const [descricao, setDescricao] = useState<string | null>(null)
 
     function handleSelecionarAreaArtistica(opcao: 'musica'| 'cenica' | 'artesanato'){
         setArea(opcao)
-        setArtistaInfos(prev => {
-            prev.area = opcao
-            return prev
-            })
-        permitirProximaEtapa()
+        if(cidadeSelecionada && estadoSelecionado){
+            permitirProximaEtapa()
+        }
     }
 
-    function handleResposta(resposta: 'grupo' | 'individual' | string){
-        if(resposta == 'grupo'|| 'individual'){
-            setArtistaInfos(prev => {
-            prev.tipo = resposta as 'grupo' | 'individual'; return prev})
+    function handleResposta(resposta: | 'grupo' | 'individual' | string){
+        if(resposta == 'grupo'|| resposta == 'individual'){
+            setTipo(resposta as  'grupo' | 'individual')
         } else {
-            setArtistaInfos(prev => {
-                prev.nome = resposta; return prev})    
+            setNome(resposta)  
+        }
+    }
+
+    function handleInformarLocalidade(local: 'cidade' | 'estado', nome: string){
+        if(local == 'cidade'){
+            setCidadeSelecionada(nome)
+            if(estadoSelecionado && area){
+                permitirProximaEtapa()
+            }
+        } else{ 
+            setEstadoSelecionado(nome) 
+            if(cidadeSelecionada && area){
+                permitirProximaEtapa()
+            }
+        }
+    }
+    function handleFinalizarConfiguracaoPerfil(links: TypeLinksPerfil[]){
+    console.log(area,descricao, localidade, tipo , nome)
+        if(area && descricao && localidade && tipo && nome){
+            const perfil = {
+                _id: props.userId,
+                agenda: null,
+                area,
+                descricao,
+                localidade,
+                nome,
+                tipo,
+                linksDoPerfil: links
+            }
+            console.log('informacoes do perfil concluidas, links recebidos', links)
+            setModalLoadingAberto({content: 'Salvando as informações do seu perfil'})
+            salvarPerfilArtistico({perfil, userId: props.userId, concluirRegistro})
+
+            function concluirRegistro(perfilArtisticoId: string | null){
+                setModalLoadingAberto(false)
+                // redirecionar pra rl perfil
+                //atualizar o session
+            }
         }
     }
 
@@ -49,35 +85,43 @@ export default function ConfigurarPerfil(){
     }
 
     function handleProximaEtapa(){
+        if(etapa == 1){
+            setLocalidade({
+                localidadePrincipal:{cidade: cidadeSelecionada, estado: estadoSelecionado}})
+        }
         setPermitirProxEtapa(false)
         setEtapa(etapa => etapa + 1)
     }
 
-    useEffect(()=> {console.log(etapa)},[etapa])
+    useEffect(()=>{console.log(etapa)},[etapa])
 
     return(<>
-        <div className="flex flex-col">
+        <div className="flex flex-col relative h-full w-full">
+            <ToastContainer/>
+            {modalLoadingAberto && (<Modal_Loading content={modalLoadingAberto.content}/>)}
         {etapa == 1 && (<>
             <h1>Vamos montar o seu perfil!</h1>
             <p>Primeiro, informe sua cidade e qual área artística é aplicavel ao seu perfil?</p>
-            <span>
-                <label htmlFor=''>Estado</label>
-                <input type="text" name='cidade'></input>
-                <label htmlFor='cidade'>Cidade</label>
-                <input type="text" name='cidade'></input>
-
-            </span>
+            <DefinirLocalidade cidadeSelecionada={cidadeSelecionada}
+            estadoSelecionado={estadoSelecionado}
+            handleInformarLocalidade={handleInformarLocalidade}/>
             <ul>
                 <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('musica')}>Música</button></li>
                 <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('artesanato')}>Artesanato</button></li>
                 <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('cenica')}>Cênica</button></li>
             </ul>
         </>)}
-        {etapa == 2 && area &&(<Etapa_TipoENome area={area} responder={handleResposta} permitirProximaEtapa={permitirProximaEtapa}/>)} 
-        <button disabled={!permitirProxEtapa ? true : false}
-        type='button'
-        className={`${!permitirProxEtapa && 'opacity-45'}`}
-        onClick={handleProximaEtapa}>Próximo</button>
+
+        {etapa == 2 && area &&(<Etapa_TipoENome area={area} responder={handleResposta} permitirProximaEtapa={permitirProximaEtapa}/>)}
+
+        {etapa == 3 && nome && area && (<Etapa_Detalhes area={area} descricao={descricao} setDescricao={setDescricao} handleFinalizarConfiguracaoPerfil={handleFinalizarConfiguracaoPerfil} nome={nome}/>)}
+
+        {etapa <=2 && (
+            <button disabled={!permitirProxEtapa ? true : false}
+            type='button'
+            className={`${!permitirProxEtapa && 'opacity-45'}`}
+            onClick={handleProximaEtapa}>Próximo</button>
+        )}
         </div>
     </>)
 }

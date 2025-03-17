@@ -13,7 +13,7 @@ async function hashPassword(plainPassword) {
 async function registrarNovoUser(email,username, password) {
   const passwordHash = await hashPassword(password);
   try {
-    const req = await axios.post(`${url}/api/user/new`, {
+    const req = await axios.post(`${url}/api/user/criar`, {
       email,
       username,
       password: passwordHash,

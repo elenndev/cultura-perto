@@ -32,7 +32,7 @@ export default function Etapa_TipoENome(props: etapaProps){
             type="button" onClick={()=> handleResposta('grupo')}>Perfil de Grupo{props.area == 'musica' && ' (Ex: Banda)'}</button></li>
         </ul>
         {opcaoSelecionada && (<>
-            <label htmlFor='nome'>{opcaoSelecionada == 'grupo' ? `Qual o nome do grupo${props.area == 'musica' && '/banda'}?` : 'Qual o seu nome artístico?'}</label>
+            <label htmlFor='nome'>{opcaoSelecionada == 'grupo' ? `Qual o nome do grupo${props.area == 'musica' ? '/banda?' : '?'}` : 'Qual o seu nome artístico?'}</label>
             <input type="text" name="nome" placeholder='Digite o nome' value={nome}
             onChange={(e)=> {
                 setNome(e.target.value)

@@ -7,7 +7,6 @@ const linksPerfilSchema = new mongoose.Schema({
 
 const localidadeSchema = new mongoose.Schema({
     cidade: {type: String},
-    link: {type: String},
     estado: {type: String}
 })
 
