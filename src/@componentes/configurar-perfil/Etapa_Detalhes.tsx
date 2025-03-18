@@ -42,7 +42,7 @@ export default function Etapa_Detalhes(props: etapaDetahesProps){
         <h1>Olá {props.nome}, boas vindas ao Cultura Perto!</h1>
         <span>
             <p>Conte um pouco mais sobre você e a sua história</p>
-            <textarea placeholder="Esse texto aparecerá para os demais usuários ao acessarem o seu perfil"
+            <textarea defaultValue={props.descricao ?? ''} placeholder="Esse texto aparecerá para os demais usuários ao acessarem o seu perfil"
             onChange={(e)=> props.setDescricao(e.target.value)}></textarea>
         </span>
         <span>

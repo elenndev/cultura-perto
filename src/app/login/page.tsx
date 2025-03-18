@@ -37,7 +37,11 @@ export default function Page() {
         setError(response?.error ?? "Erro ");
         setLoading(false)
       } else {
-      router.push('/')
+        if(criandoConta){
+          router.push('/personalizar-perfil')
+        } else {
+          router.push('/')
+        }
     }
       };
   

@@ -1,18 +1,21 @@
 'use client'
 import { TypeLinksPerfil, TypeLocalidadePerfil } from "@/types"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Etapa_TipoENome from "./Etapa_TipoENome";
 import DefinirLocalidade from "./DefinirLocalidade";
 import Etapa_Detalhes from "./Etapa_Detalhes";
 import { ToastContainer } from "react-toastify";
 import { useConfigurarPerfil } from "./useConfigurarPerfil";
 import Modal_Loading from "../modals/Modal_Loading";
+import { useRouter } from "next/navigation";
+import {toast} from 'react-toastify'
 
 interface configurarPerfilProps {
     userId: string;
 }
 export default function ConfigurarPerfil(props: configurarPerfilProps){
     const { salvarPerfilArtistico } = useConfigurarPerfil()
+    const router = useRouter()
     //controlar modal
     const [modalLoadingAberto, setModalLoadingAberto] = useState<false | {content: string}>(false)
 
@@ -70,12 +73,18 @@ export default function ConfigurarPerfil(props: configurarPerfilProps){
             }
             console.log('informacoes do perfil concluidas, links recebidos', links)
             setModalLoadingAberto({content: 'Salvando as informações do seu perfil'})
-            salvarPerfilArtistico({perfil, userId: props.userId, concluirRegistro})
+            salvarPerfilArtistico({perfil, userId: props.userId, concluirRegistro, tentarNovamente})
 
-            function concluirRegistro(perfilArtisticoId: string | null){
+            function concluirRegistro(){
                 setModalLoadingAberto(false)
-                // redirecionar pra rl perfil
-                //atualizar o session
+                router.push('/')
+            }
+
+            function tentarNovamente(){
+                
+                setModalLoadingAberto(false)
+                setEtapa(1)
+                toast.error('Erro ao tentar salvar as informações do seu perfil, se o erro persistir por favor entre em contato com o suporte')
             }
         }
     }
@@ -93,7 +102,6 @@ export default function ConfigurarPerfil(props: configurarPerfilProps){
         setEtapa(etapa => etapa + 1)
     }
 
-    useEffect(()=>{console.log(etapa)},[etapa])
 
     return(<>
         <div className="flex flex-col relative h-full w-full">
