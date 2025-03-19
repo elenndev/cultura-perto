@@ -21,7 +21,6 @@ export async function GET(request: NextRequest){
             if(userByUsername && userByEmail){
                 return NextResponse.json({user: 'email e nome de usuario indisponiveis'})
             } else if(userByUsername || userByEmail){
-                console.log('3')
                 return NextResponse.json({user: `${userByUsername ? 'username' : 'email'} indisponivel`})
             } else {
                 return NextResponse.json({user: null})

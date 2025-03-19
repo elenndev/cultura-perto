@@ -6,7 +6,6 @@ const url = process.env.NEXT_PUBLIC_APP_URL
 
 
 export function useCriarConta(){
-
     async function registrarNovoUsuario(email: string,username: string, password: string, perfil: TypePerfilArtistico) {
         try {
             const req = await axios.post(`${url}/api/user/criar`, {

@@ -10,7 +10,6 @@ async function verificarSenha(plainPassword, hash) {
 }
 
 async function buscarUserDb(credential) {
-  console.log('credential que vai ser enviada', credential)
   try {
     const req = await axios.get(`${url}/api/user`, { params: { credential } });
     if (req.data.user) {
@@ -20,7 +19,6 @@ async function buscarUserDb(credential) {
         username: req.data.user.username,
         password: req.data.user.password,
         isverified: req.data.isverified,
-        perfilArtisticoId:  req.data.perfilArtisticoId
       } 
       return user;
     } else {
@@ -64,7 +62,6 @@ export const authOptions = {
       session.user.id = token.sub
       session.user.username =token.username
       session.user.isverified = token.isverified
-      session.user.perfilArtisticoId = token.perfilArtisticoId
       return session;
     },
     async jwt({ token, user }) {
@@ -74,7 +71,6 @@ export const authOptions = {
         token.picture = null
         token.sub = user._id
         token.isverified = user.isverified
-        token.perfilArtisticoId = user.perfilArtisticoId
       }
       return token;
     },

@@ -9,9 +9,6 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:[true],
     },
-    perfilArtisticoId:{
-        type:String,
-    },
     username: {
         type: String,
         required: [true]

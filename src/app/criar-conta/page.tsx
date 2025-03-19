@@ -26,10 +26,9 @@ export default function Page(){
                 if(novaConta){
                     const login = await signIn("credentials", {
                         redirect: true,
-                        callbackUrl: '/',
-                        email: novoUsuario.email,
+                        callbackUrl: `/perfil/${novoUsuario.username}`,
+                        credential: novoUsuario.email,
                         password: novoUsuario.password,
-                        username: novoUsuario.username,
                     })
                     if(login?.error){
                         setNovoUsuario(null)

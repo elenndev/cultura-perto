@@ -34,6 +34,7 @@ export async function POST(request: NextRequest){
 
         const perfilArtistico = await PerfilArtisticoDB.create({
             nome: perfil.nome,
+            username,
             descricao: perfil.descricao,
             tipo: perfil.tipo,
             area: perfil.area,
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest){
         } 
 
 
-        const newUser = await UserDB.create({email, password, username, isverified: false, perfilArtisticoId: perfilArtistico._id})
+        const newUser = await UserDB.create({email, password, username, isverified: false})
         if(!newUser){
             throw new Error('Erro ao tentar criar usuário no db')
         } else {
