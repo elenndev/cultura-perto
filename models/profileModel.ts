@@ -29,7 +29,7 @@ const perfilArtisticoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    descricaoo: {
+    descricao: {
         type: String,
         required: true,
     },

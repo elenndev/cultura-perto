@@ -11,8 +11,7 @@ type homepageProps<S> = {
 }
 export const Homepage = <S,>({userSession} : homepageProps<S> )=>{
     const { theme } = useThemeContext();
-    const user = userSession as {id: string, perfilArtisticoId: string}
-    console.log('user no componente Homepage:', user)
+    console.log('user no componente Homepage:', userSession)
     
     const currentTheme = theme === 'light' ? lightTheme : darkTheme;
     

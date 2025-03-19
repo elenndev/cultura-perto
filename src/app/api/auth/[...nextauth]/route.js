@@ -5,56 +5,22 @@ import axios from "axios";
 
 const url = process.env.APP_URL;
 
-async function hashPassword(plainPassword) {
-  const saltRounds = 10;
-  return bcrypt.hash(plainPassword, saltRounds);
-}
-
-async function registrarNovoUser(email,username, password) {
-  const passwordHash = await hashPassword(password);
-  try {
-    const req = await axios.post(`${url}/api/user/criar`, {
-      email,
-      username,
-      password: passwordHash,
-    });
-
-    if (req) {
-      if(req.data.user == 'username indisponivel'){
-        return req.data.user
-      }
-      return {
-        email,
-        username,
-        isverified: false,
-        _id: req.data.id
-      };
-    } else {
-      throw new Error("Erro na requisição");
-    }
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-}
-
 async function verificarSenha(plainPassword, hash) {
   return bcrypt.compare(plainPassword, hash);
 }
 
-async function buscarUserDb(email) {
+async function buscarUserDb(credential) {
+  console.log('credential que vai ser enviada', credential)
   try {
-    const req = await axios.get(`${url}/api/user`, { params: { email } });
+    const req = await axios.get(`${url}/api/user`, { params: { credential } });
     if (req.data.user) {
       let user = {
         _id: req.data.user._id,
         email: req.data.user.email,
         username: req.data.user.username,
         password: req.data.user.password,
-        isverified: req.data.isverified
-      };
-      if (req.data.user.perfilArtisticoId) {
-        user = { ...user, perfilArtisticoId: req.data.user.perfilArtisticoId };
+        isverified: req.data.isverified,
+        perfilArtisticoId:  req.data.perfilArtisticoId
       } 
       return user;
     } else {
@@ -71,40 +37,22 @@ export const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "@mail.com" },
-        username: {label: "Username", type: "text", placeholder: 'nomeusuario'},
+        credential: {label: "Credential", type: "text", placeholder: 'Email ou nome de usuário'},
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        let user = await buscarUserDb(credentials.email);
-
-        if (credentials.action === "signin") {
-          if (user != null || undefined) {
-            throw new Error("Já existe um usuário");
-          } else {
-            user = await registrarNovoUser(credentials.email,credentials.username, credentials.password);
-            if(user == 'username indisponivel'){
-              throw new Error("Esse nome de usuário já está sendo utilizado, por favor tente outro")
-            }
-            user.perfilArtisticoId = 'none'
-            return user;
-          }
+        let user = await buscarUserDb(credentials.credential);
+        if (user == null || undefined) {
+          throw new Error("Usuário não encontrado");
         } else {
-          if (user == null || undefined) {
-            throw new Error("Usuário não encontrado");
+          const validarSenha = await verificarSenha(credentials.password, user.password);
+          if (validarSenha == true) {
+            return user;
           } else {
-            const validarSenha = await verificarSenha(credentials.password, user.password);
-            if (validarSenha == true) {
-              let sessionUser = { email: user.email, _id: user._id, perfilArtisticoId: 'none', username: user.username, isverified: user.isverified};
-              if (user.perfilArtisticoId) {
-                sessionUser.perfilArtisticoId = user.perfilArtisticoId
-              }
-              return sessionUser;
-            } else {
-              throw new Error("Credenciais erradas");
-            }
+            throw new Error("Credenciais erradas");
           }
         }
+        
       },
     }),
   ],

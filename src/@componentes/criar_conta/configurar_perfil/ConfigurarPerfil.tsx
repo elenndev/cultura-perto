@@ -1,23 +1,15 @@
 'use client'
-import { TypeLinksPerfil, TypeLocalidadePerfil } from "@/types"
+import { TypeLinksPerfil, TypeLocalidadePerfil, TypePerfilArtistico } from "@/types"
 import React, { useState } from "react"
-import Etapa_TipoENome from "./Etapa_TipoENome";
 import DefinirLocalidade from "./DefinirLocalidade";
 import Etapa_Detalhes from "./Etapa_Detalhes";
-import { ToastContainer } from "react-toastify";
-import { useConfigurarPerfil } from "./useConfigurarPerfil";
-import Modal_Loading from "../modals/Modal_Loading";
-import { useRouter } from "next/navigation";
-import {toast} from 'react-toastify'
+import Etapa_TipoENome from "./Etapa_TipoENome";
 
 interface configurarPerfilProps {
-    userId: string;
+    registrarPerfil: (perfil: TypePerfilArtistico) => void;
 }
-export default function ConfigurarPerfil(props: configurarPerfilProps){
-    const { salvarPerfilArtistico } = useConfigurarPerfil()
-    const router = useRouter()
-    //controlar modal
-    const [modalLoadingAberto, setModalLoadingAberto] = useState<false | {content: string}>(false)
+export default function ConfigurarPerfil(props : configurarPerfilProps){
+    const { registrarPerfil } = props
 
     const [etapa, setEtapa] = useState(1)
     const [permitirProxEtapa, setPermitirProxEtapa] = useState(false)
@@ -59,10 +51,9 @@ export default function ConfigurarPerfil(props: configurarPerfilProps){
         }
     }
     function handleFinalizarConfiguracaoPerfil(links: TypeLinksPerfil[]){
-    console.log(area,descricao, localidade, tipo , nome)
         if(area && descricao && localidade && tipo && nome){
             const perfil = {
-                _id: props.userId,
+                _id: 'none',
                 agenda: null,
                 area,
                 descricao,
@@ -71,21 +62,7 @@ export default function ConfigurarPerfil(props: configurarPerfilProps){
                 tipo,
                 linksDoPerfil: links
             }
-            console.log('informacoes do perfil concluidas, links recebidos', links)
-            setModalLoadingAberto({content: 'Salvando as informações do seu perfil'})
-            salvarPerfilArtistico({perfil, userId: props.userId, concluirRegistro, tentarNovamente})
-
-            function concluirRegistro(){
-                setModalLoadingAberto(false)
-                router.push('/')
-            }
-
-            function tentarNovamente(){
-                
-                setModalLoadingAberto(false)
-                setEtapa(1)
-                toast.error('Erro ao tentar salvar as informações do seu perfil, se o erro persistir por favor entre em contato com o suporte')
-            }
+            registrarPerfil(perfil)
         }
     }
 
@@ -105,8 +82,6 @@ export default function ConfigurarPerfil(props: configurarPerfilProps){
 
     return(<>
         <div className="flex flex-col relative h-full w-full">
-            <ToastContainer/>
-            {modalLoadingAberto && (<Modal_Loading content={modalLoadingAberto.content}/>)}
         {etapa == 1 && (<>
             <h1>Vamos montar o seu perfil!</h1>
             <p>Primeiro, informe sua cidade e qual área artística é aplicavel ao seu perfil?</p>
