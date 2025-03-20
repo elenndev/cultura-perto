@@ -20,7 +20,7 @@ const eventoSchema = new mongoose.Schema({
     icon: {type: String},
     detalhes: {type: String, required:true},
     data: {type: [Date], required:true},
-    localidade: {type: [localidadeSchema], required:true},
+    localidade: {type: localidadeSchema, required:true},
     linksEvento: {type: [linksEvento], required:true},
 })
 

@@ -4,7 +4,7 @@ export type TypeEvento = {
     nome: string;
     detalhes: string;
     datas: Date[];
-    localidade: TypeLocalidadePerfil[];
+    localidade: TypeLocalidadePerfil;
     linksEvento: TypeLinkEvento[]
 }
 
