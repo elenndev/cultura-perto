@@ -1,42 +1,25 @@
 'use client'
-import { TypeEvento, TypeLocalidadePerfil } from "@/types";
-import { nanoid } from "nanoid";
+import { TypeEvento } from "@/types";
 import { useState } from "react";
 import JanelaEvento from "./JanelaEvento";
-const data1 = new Date()
-const data2 = new Date(2024, 2, 19)
-const data3 = new Date(2025, 4, 19)
-const links = [{nome: 'localizacao', link: '#'}, {nome: 'outro link', link: '#'}]
-const exemplolocal: TypeLocalidadePerfil = {cidade: 'itumbiara', estado: 'GO'}
+import { useAuthContext } from "../../context/ContextAuth";
+import CriarEditarEvento from "./CriarEditarEvento";
 
-const propsAgenda: TypeEvento[] | null = [{
-    datas: [data2, data1, data3],
-    detalhes: 'exemplo detalhes evento',
-    nome: 'exemplo nome evento',
-    linksEvento: links,
-    localidade: exemplolocal
-}]
-export default function Agenda(){
+interface agendaProps {
+    eventos: TypeEvento[] | null;
+    salvarEvento: (evento: TypeEvento, isNovoEvento: boolean)=> void;
+}
+export default function Agenda(props: agendaProps){
+    const {eventos} = props
     const [eventoAberto, setEventoAberto] = useState<false | TypeEvento>(false)
-
-    const dataAtual = new Date()
-    let agenda: (TypeEvento & {id: string})[] | null = null
-    if(propsAgenda){
-        agenda = propsAgenda.map(evento =>{
-            const datas = evento.datas.filter(data => data >= dataAtual)
-            if(datas.length > 0){
-                return{...evento,
-                    datas: datas.sort((a, b) => a.getTime() - b.getTime()),
-                    id: nanoid()
-                }
-
-            }
-            return null
-        }).filter((evento): evento is TypeEvento & { id: string } => evento !== null);
-    }
+    const [editarEvento, setEditarEvento] = useState<null | TypeEvento>(null)
+    const [criarEvento, setCriarEvento] = useState(false)
+    const context = useAuthContext()
+    const isLogged = context? true : false
+    console.log('isLogged',isLogged)
     
     function abrirJanelaDoEvento(eventoId: string){
-        const buscarEvento = agenda!.find(evento => evento.id == eventoId)
+        const buscarEvento = eventos!.find(evento => evento.id == eventoId)
         if(buscarEvento){
             setEventoAberto(buscarEvento)
         }
@@ -46,33 +29,50 @@ export default function Agenda(){
         setEventoAberto(false)
     }
 
+    function handleSalvarEvento(evento: TypeEvento, isNovoEvento: boolean){
+        setCriarEvento(false)
+        props.salvarEvento(evento, isNovoEvento)
+    }
+
+    function cancelarCriacaoEdicaoEvento(){
+        setCriarEvento(false)
+        setEditarEvento(null)
+    }
+
     return(<div className="agenda flex flex-col">
         <p>Agenda</p>
-        {agenda ? (<>
+        {eventos ? (<>
             <table>
                 <thead>
                     <tr>
                         <th>Evento</th>
-                        <th>Data mais próxima</th>
-                        <th>próxima data e cidade</th>
-                        <th>Abrir</th>
+                        <th>Data</th>
+                        <th>Local</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {agenda.map(evento => (
+                    {eventos.map(evento => (
                         <tr key={evento.id}>
                             <td>{evento.nome}</td>
-                            <td>{evento.datas[0].toLocaleDateString()}</td>
-                            <td className="flex flex-col">
-                                {evento.datas[1] ? (<p>{evento.datas[1].toLocaleDateString()}</p>): (<p>Data única</p>)}
-                                <p>{evento.localidade.cidade}</p>
+                            <td>{evento.data.toLocaleDateString()}</td>
+                            <td>{evento.localidade.nomeLocal}</td>
+                            <td>
+                                <button type="button" onClick={()=> abrirJanelaDoEvento(evento.id)}>Ver detalhes</button>
+                                {isLogged && (<button type="button"
+                                onClick={()=> setEditarEvento(evento)}>Editar</button>)}
                             </td>
-                            <td><button type="button" onClick={()=> abrirJanelaDoEvento(evento.id)}>abrir</button></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            {eventoAberto && (<JanelaEvento evento={eventoAberto} fecharJanela={fecharJanelaEvento}/>)}
+            {eventoAberto && (
+                <JanelaEvento evento={eventoAberto} fecharJanela={fecharJanelaEvento}/>)}
         </>) : (<p>Nenhum evento no momento</p>)}
+            {isLogged && (<button type='button' onClick={()=> setCriarEvento(true)}>Adicionar novo evento</button>)}
+            {isLogged && (criarEvento || editarEvento) && (
+                <CriarEditarEvento 
+                editarEvento={editarEvento} salvarEvento={handleSalvarEvento}
+                cancelar={cancelarCriacaoEdicaoEvento}/>)}
     </div>)
 }

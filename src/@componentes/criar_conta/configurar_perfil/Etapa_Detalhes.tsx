@@ -25,10 +25,10 @@ export default function Etapa_Detalhes(props: etapaDetahesProps){
             const linksFiltrados = Object.fromEntries(
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 Object.entries(links).filter(([_, link]) => link.trim() !== '')
-            );
+            )
             
             const linksDoPerfil: TypeLinksPerfil[] | null = Object.entries(linksFiltrados)
-                .map(([nome, link]) => ({ nome: nome as TypeLinksPerfil["nome"], link }));
+                .map(([nome, link]) => ({ nome: nome as TypeLinksPerfil["nome"], link }))
             
 
             props.handleFinalizarConfiguracaoPerfil(linksDoPerfil)

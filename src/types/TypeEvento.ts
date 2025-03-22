@@ -1,14 +1,19 @@
-import { TypeLocalidadePerfil } from "./TypePerfilArtistico";
-
 export type TypeEvento = {
+    id: string;
     nome: string;
     detalhes: string;
-    datas: Date[];
-    localidade: TypeLocalidadePerfil;
-    linksEvento: TypeLinkEvento[]
+    data: Date;
+    localidade: TypeLocalidadeEvento;
+    linksEvento?: TypeLinkEvento[] 
+}
+export type TypeLinkEvento = {
+    nome: string;
+    link: string;
 }
 
-type TypeLinkEvento = {
-    nome: 'localizacao ' | string;
+export type TypeLocalidadeEvento = {
+    nomeLocal: string; 
+    bairro: string;
+    rua: string;
     link: string;
 }

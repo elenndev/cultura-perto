@@ -1,5 +1,6 @@
 import { Perfil } from "@/@componentes/perfil/Perfil";
 import { TypePerfilArtistico } from "@/types";
+import { getSessionData } from "@/utils/auth";
 import axios from "axios";
 import { Suspense } from "react";
 
@@ -35,10 +36,12 @@ export default async function Page(props : {params: Params}) {
     if(!perfil){
     return(<p>Perfil não encontrado</p>)
     }
+    const session = await getSessionData()
+    const isLogged = session ? session.user as {id: string} : false
 
     return (<>
     <Suspense fallback={<p>Carregando perfil...</p>}>
-        <Perfil perfil={perfil}/>
+        <Perfil perfil={perfil} isLogged={isLogged}/>
     </Suspense>
     </>)
 }
