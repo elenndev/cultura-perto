@@ -22,11 +22,10 @@ const linksEventoSchema = new mongoose.Schema({
 })
 
 const eventoSchema = new mongoose.Schema({
-    id: {type: String, required: true},
     nome: {type: String, required:true},
     icon: {type: String},
     detalhes: {type: String, required:true},
-    data: {type: [Date], required:true},
+    data: {type: Date, required:true},
     localidade: {type: localEventoSchema, required:true},
     linksEvento: {type: [linksEventoSchema], required:true},
 })
@@ -53,10 +52,10 @@ const perfilArtisticoSchema = new mongoose.Schema({
         required:true
     },
     linksDoPerfil: {
-        type: [linksPerfilSchema]
+        type: [linksPerfilSchema], default: []
     },
     localidade: {type: localidadeSchema, required: true},
-    agenda: { type: eventoSchema}
+    agenda: { type: [eventoSchema], default: []}
 })
 
 const PerfilArtisticoDB = mongoose.models.perfisArtistas || mongoose.model("perfisArtistas", perfilArtisticoSchema)

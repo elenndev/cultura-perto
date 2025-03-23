@@ -13,6 +13,7 @@ export async function POST(request: NextRequest){
     try {
         await connectMongoDB()
         const {email, username, plainPassword, perfil } = await request.json()
+        console.log('perfil na route para criar', perfil)
         
         if(!email || !plainPassword || !username || !perfil){
             throw new Error('Parâmetros necessários não encontrados na requisição')
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest){
             throw new Error('Erro ao tentar criar usuário no db')
         } 
 
+        console.log('documentos gerados no banco de dados', perfilArtistico)
 
         const newUser = await UserDB.create({email, password, username, isverified: false})
         if(!newUser){
@@ -52,6 +54,8 @@ export async function POST(request: NextRequest){
         } else {
             return NextResponse.json({id: newUser._id},{status: 200})
         }
+
+        
 
     }catch(error){
         console.log(error)

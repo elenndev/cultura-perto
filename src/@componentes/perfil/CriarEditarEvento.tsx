@@ -12,7 +12,7 @@ interface criarEventoProps {
 }
 export default function CriarEditarEvento(props : criarEventoProps){
     const { editarEvento, salvarEvento, cancelar} = props
-    const eventoId = editarEvento?.id ?? nanoid()
+    const eventoId = editarEvento?._id ?? nanoid()
     const [nome, setNome] = useState<null | string>(editarEvento?.nome ?? null)
     const [detalhes, setDetalhes] = useState<null | string>(editarEvento?.detalhes ?? null)
     const [data, setData] = useState<null | Date>(editarEvento?.data ?? null)
@@ -23,9 +23,9 @@ export default function CriarEditarEvento(props : criarEventoProps){
         link: ''
     })
 
-    const [editarCriarLink,setEditarCriarLink] =useState<null | (TypeLinkEvento & {id: string})>(null)
+    const [editarCriarLink,setEditarCriarLink] =useState<null | TypeLinkEvento>(null)
 
-    const [linksEvento, setLinksEvento] = useState<null | (TypeLinkEvento & {id: string})[]>(
+    const [linksEvento, setLinksEvento] = useState<null | TypeLinkEvento[]>(
         editarEvento?.linksEvento ? 
             editarEvento.linksEvento.map(link => {const linkFormatado = {...link, id: nanoid()} as TypeLinkEvento & {id: string}; return linkFormatado }) 
         : null)
@@ -35,11 +35,11 @@ export default function CriarEditarEvento(props : criarEventoProps){
         setData(data)
     }
 
-    function salvarLink(link: TypeLinkEvento & {id: string}){
+    function salvarLink(link: TypeLinkEvento){
         setEditarCriarLink(null)
         setLinksEvento(prev =>{
             const listaAtualizada = prev?.map(item => {
-                if(item.id == link.id){
+                if(item._id == link._id){
                     return link
                 } else { return item}
             }) ?? prev
@@ -47,7 +47,7 @@ export default function CriarEditarEvento(props : criarEventoProps){
         })
     }
 
-    function editarLink(link: TypeLinkEvento & {id: string}){
+    function editarLink(link: TypeLinkEvento){
         setEditarCriarLink(link)
     }
 
@@ -55,9 +55,9 @@ export default function CriarEditarEvento(props : criarEventoProps){
         setEditarCriarLink(null)
     }
 
-    function deletarLink(link: TypeLinkEvento & {id: string}){
+    function deletarLink(link: TypeLinkEvento){
         setLinksEvento(prev => {
-            prev?.filter(item => item.id == link.id)
+            prev?.filter(item => item._id == link._id)
             if(prev?.length == 0){ prev = null}
             return prev
         })
@@ -67,14 +67,14 @@ export default function CriarEditarEvento(props : criarEventoProps){
         setEditarCriarLink({
             nome: '',
             link: '',
-            id: nanoid()})
+            _id: nanoid()})
     }
 
     function handleSalvarEvento(e: React.FormEvent){
         e.preventDefault()
         if(nome && detalhes && data  && Object.values(localidade).some(localInfo => localInfo.trim() != '')){
             let evento: TypeEvento = {
-                nome, detalhes, data, localidade, id: eventoId
+                nome, detalhes, data, localidade, _id: eventoId
             }
 
             if (linksEvento && Object.values(localidade).some(localInfo => typeof localInfo === 'string' && localInfo.trim() !== '')){
@@ -131,7 +131,7 @@ export default function CriarEditarEvento(props : criarEventoProps){
                                 <p>Adicione também os links relacionados ao evento, por exemplo link para formulário de confirmação de presença, um website sobre o evento, post sobre evento nas redes sociais, etc... <i className="text-gray-700">{'(Opcional)'}</i></p>
                             ) : (<p>Lista de links</p>)}
                             {linksEvento?.map(link =>(
-                                <span key={link.id}
+                                <span key={link._id}
                                 className="flex flex-row">
                                     <p>{link.nome}</p>
                                     <button type='button' onClick={()=> editarLink(link)}>Editar</button>

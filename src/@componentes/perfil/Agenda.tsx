@@ -16,10 +16,9 @@ export default function Agenda(props: agendaProps){
     const [criarEvento, setCriarEvento] = useState(false)
     const context = useAuthContext()
     const isLogged = context? true : false
-    console.log('isLogged',isLogged)
     
     function abrirJanelaDoEvento(eventoId: string){
-        const buscarEvento = eventos!.find(evento => evento.id == eventoId)
+        const buscarEvento = eventos?.find(evento => evento._id == eventoId)
         if(buscarEvento){
             setEventoAberto(buscarEvento)
         }
@@ -53,12 +52,13 @@ export default function Agenda(props: agendaProps){
                 </thead>
                 <tbody>
                     {eventos.map(evento => (
-                        <tr key={evento.id}>
+                        <tr key={evento._id}>
                             <td>{evento.nome}</td>
-                            <td>{evento.data.toLocaleDateString()}</td>
+                            <td>{new Date(evento.data).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+                        }</td>
                             <td>{evento.localidade.nomeLocal}</td>
                             <td>
-                                <button type="button" onClick={()=> abrirJanelaDoEvento(evento.id)}>Ver detalhes</button>
+                                <button type="button" onClick={()=> abrirJanelaDoEvento(evento._id)}>Ver detalhes</button>
                                 {isLogged && (<button type="button"
                                 onClick={()=> setEditarEvento(evento)}>Editar</button>)}
                             </td>
@@ -72,7 +72,8 @@ export default function Agenda(props: agendaProps){
             {isLogged && (<button type='button' onClick={()=> setCriarEvento(true)}>Adicionar novo evento</button>)}
             {isLogged && (criarEvento || editarEvento) && (
                 <CriarEditarEvento 
-                editarEvento={editarEvento} salvarEvento={handleSalvarEvento}
+                editarEvento={editarEvento} 
+                salvarEvento={handleSalvarEvento}
                 cancelar={cancelarCriacaoEdicaoEvento}/>)}
     </div>)
 }

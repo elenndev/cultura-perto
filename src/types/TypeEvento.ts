@@ -1,5 +1,5 @@
 export type TypeEvento = {
-    id: string;
+    _id: string;
     nome: string;
     detalhes: string;
     data: Date;
@@ -7,6 +7,7 @@ export type TypeEvento = {
     linksEvento?: TypeLinkEvento[] 
 }
 export type TypeLinkEvento = {
+    _id: string;
     nome: string;
     link: string;
 }

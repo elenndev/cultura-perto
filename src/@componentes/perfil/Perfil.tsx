@@ -15,9 +15,22 @@ export function Perfil(props : perfilProps){
     const {salvarEvento} = usePerfil()
     const [eventos, setEventos] = useState<null | TypeEvento[]>(perfil.agenda)
 
+    function removerEvento(eventoId: string){
+        //remove Evento da lista seja por erro na criação ou se o usuário deletou o evento
+        setEventos(prev =>{
+            const listaAtualizada = prev?.filter(item => item._id == eventoId)
+            if (listaAtualizada){
+                return listaAtualizada.length > 0 ? listaAtualizada : null
+            } else {
+                return  null
+            }
+        })
+    }
+
     function handleSalvarEvento(evento: TypeEvento, isNovoEvento: boolean){
-        if(isNovoEvento){
-        }
+        // quando criado no navegador o evento terá um id temporário que será guardado aqui,
+        //após a requisição no banco de dados ser feita com sucesso, ela retorna um novo id por isso guardamos o antigo para buscar pelo evento que terá o id atualizado
+        const idParaSubstituir = evento._id
         setEventos(prev =>{
             if(isNovoEvento){
                 if(prev){prev.push(evento)}
@@ -25,7 +38,7 @@ export function Perfil(props : perfilProps){
                 return prev
             } else {
                 const listaAtualizada = prev?.map(prevItem =>{
-                    if(prevItem.id == evento.id){
+                    if(prevItem._id == evento._id){
                         return evento
                     } else {
                         return prevItem
@@ -34,10 +47,24 @@ export function Perfil(props : perfilProps){
                 return listaAtualizada
             }
         })
-        toast.promise(()=>salvarEvento({evento, isNovoEvento, perfilId: perfil._id}),
+        
+        toast.promise(()=>salvarEvento({evento, isNovoEvento, username: perfil.username, atualizarId, handleErro: removerEvento}),
         {error: `Erro ao tentar salvar evento`,
         pending: 'Salvando evento', success: 'Evento salvo com sucesso'
         })
+
+        function atualizarId(novoId: string){
+            setEventos(prev =>{
+                const listaAtualizada = prev?.map(prevItem =>{
+                    if(prevItem._id == idParaSubstituir){
+                        return {...prevItem, _id: novoId}
+                    } else {
+                        return prevItem
+                    }
+                }) ?? prev
+                return listaAtualizada
+            })
+        }
     }
 
     return(<>

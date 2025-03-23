@@ -3,8 +3,8 @@ import { TypeLinkEvento } from "@/types"
 import { useState } from "react";
 
 interface linkDoEventoProps{
-    linkEvento: (TypeLinkEvento & {id: string}); 
-    salvarLink: (link: TypeLinkEvento & {id: string}) => void;
+    linkEvento: (TypeLinkEvento); 
+    salvarLink: (link: TypeLinkEvento) => void;
     cancelar: () => void;
 }
 export default function NewLinkDoEvento(props: linkDoEventoProps){
@@ -17,7 +17,7 @@ export default function NewLinkDoEvento(props: linkDoEventoProps){
         if(nome == ""  && link == ""){
             setErro(true)
         } else {
-            salvarLink({nome, link, id: props.linkEvento.id})
+            salvarLink({nome, link, _id: props.linkEvento._id})
         }
     }
 

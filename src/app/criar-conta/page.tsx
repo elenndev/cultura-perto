@@ -62,7 +62,7 @@ export default function Page(){
             <CriarConta irParaOsDetalhes={irParaOsDetalhes}/>
         </>)}
         {configurarDetalhes && novoUsuario && (<>
-            <ConfigurarPerfil registrarPerfil={registrarPerfil}/>
+            <ConfigurarPerfil registrarPerfil={registrarPerfil} username={novoUsuario.username}/>
         </>
             )}
     </main>)

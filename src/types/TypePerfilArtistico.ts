@@ -4,13 +4,12 @@ export type TypePerfilArtistico = {
     _id: string;
     icon?: string;
     nome: string;
+    username: string;
     descricao: string;
     tipo: 'grupo' | 'individual';
     area: 'musica' | 'cenica' | 'artesanato';
     linksDoPerfil: TypeLinksPerfil[];
-    localidade: {
-        localidadePrincipal: TypeLocalidadePerfil;
-    }
+    localidade: TypeLocalidadePerfil;
     agenda: null | TypeEvento[]
 }
 

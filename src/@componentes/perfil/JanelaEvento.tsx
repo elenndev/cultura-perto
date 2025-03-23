@@ -7,9 +7,6 @@ interface janelaEventoProps {
 }
 export default function JanelaEvento(props: janelaEventoProps){
     const {evento} = props
-    const linkLocalizacaoEvento = evento.linksEvento.find(link => link.nome == 'localizacao')
-    let outrosLinks: {nome:string, link: string}[] | null = evento.linksEvento.filter(link => link.nome != 'localizacao')
-    outrosLinks = outrosLinks.length == 0 ? null : outrosLinks
     return(
         <span className="janelaHolder flex flex-col bg-gray-600 absolute h-full w-full items-center justify-center">
             <div className="janelaEvento bg-white flex flex-col w-[300px] items-center justify-center">
@@ -18,20 +15,18 @@ export default function JanelaEvento(props: janelaEventoProps){
                     <button type="button" onClick={()=> props.fecharJanela()}>Fechar</button>
                     </div>
                 <div className="janelaEvento-body">
-                    <p>{evento.datas[0].toLocaleDateString()}</p>
+                    <p>{new Date(evento.data).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
                     <p>{evento.detalhes}</p>
-                    {outrosLinks && (<>
+                    {evento.linksEvento && (<>
                         <p>links do evento</p>
                         <ul>
-                            {outrosLinks.map(link =><li key={nanoid()}>
+                            {evento.linksEvento.map(link =><li key={nanoid()}>
                                 <a href={link.link}>{link.nome}</a>
                             </li>)}
                         </ul>
                     </>)}
-                    {linkLocalizacaoEvento && (
-                        <a href={linkLocalizacaoEvento.link}
-                        className='bg-purple-700 text-white'>Localização</a>
-                    )}
+                    <a href={evento.localidade.link}
+                    className='bg-purple-700 text-white'>Localização</a>
                 </div>
             </div>
         </span>

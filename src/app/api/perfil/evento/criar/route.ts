@@ -4,25 +4,29 @@ import { connectMongoDB } from "../../../../../../lib/db";
 
 export async function POST(request: NextRequest){
     try {
-        const {evento, perfilId} = await request.json()
+        const {evento} = await request.json()
         if(!evento){
             throw new Error('Parâmetros necessários não encontrados na requisição')
         }
 
         await connectMongoDB()
 
-        const novoEvento = await PerfilArtisticoDB.updateOne(
-            {_id: perfilId},
-            {$push: {agenda: evento}},
-        )
+        const perfil = await PerfilArtisticoDB.findOne({username: evento.username})
+        const _id = perfil._id
+        
+        const novoEvento = await PerfilArtisticoDB.findByIdAndUpdate(
+            {_id},
+            { $push: { agenda: evento } }, 
+            { new: true }
+        );
 
-        if(novoEvento.modifiedCount == 1){
-            return NextResponse.json({updated: 200}, {status: 200})
-        } else if(novoEvento.matchedCount < 1){
-            return NextResponse.json({updated: 'Não foi encontrado nenhum documento para ser atualizado'})
+
+        if(novoEvento){
+            return NextResponse.json({updated: {novoId: novoEvento._id}}, {status: 200})
         } else {
-            throw new Error('Erro para atualizar no banco de dados')
+            return NextResponse.json({updated: 'Não foi encontrado nenhum documento para ser atualizado'}, {status: 200})
         }
+
 
     }catch(error){
         console.log(error)

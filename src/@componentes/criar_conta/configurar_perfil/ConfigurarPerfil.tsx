@@ -7,13 +7,14 @@ import Etapa_TipoENome from "./Etapa_TipoENome";
 
 interface configurarPerfilProps {
     registrarPerfil: (perfil: TypePerfilArtistico) => void;
+    username: string;
 }
 export default function ConfigurarPerfil(props : configurarPerfilProps){
-    const { registrarPerfil } = props
+    const { registrarPerfil, username } = props
 
     const [etapa, setEtapa] = useState(1)
     const [permitirProxEtapa, setPermitirProxEtapa] = useState(false)
-    const [localidade, setLocalidade] = useState<{localidadePrincipal: TypeLocalidadePerfil} | null>(null)
+    const [localidade, setLocalidade] = useState< TypeLocalidadePerfil | null>(null)
     const [estadoSelecionado, setEstadoSelecionado] = useState<string>("");
     const [cidadeSelecionada, setCidadeSelecionada] = useState<string>("");
 
@@ -60,6 +61,7 @@ export default function ConfigurarPerfil(props : configurarPerfilProps){
                 localidade,
                 nome,
                 tipo,
+                username,
                 linksDoPerfil: links
             }
             registrarPerfil(perfil)
@@ -72,8 +74,7 @@ export default function ConfigurarPerfil(props : configurarPerfilProps){
 
     function handleProximaEtapa(){
         if(etapa == 1){
-            setLocalidade({
-                localidadePrincipal:{cidade: cidadeSelecionada, estado: estadoSelecionado}})
+            setLocalidade({cidade: cidadeSelecionada, estado: estadoSelecionado})
         }
         setPermitirProxEtapa(false)
         setEtapa(etapa => etapa + 1)
