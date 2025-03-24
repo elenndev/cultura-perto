@@ -25,17 +25,43 @@ export function usePerfil(){
                 }})
             if(req.data.updated.novoId){
                 atualizarId(req.data.updated.novoId)
-            }else if(req.data.updated && req.status != 500){
+            }else if(req.data.updated != 200){
                 throw new Error(`${req.data.updated}`)
-            } else {throw new Error("Erro ana requisição")}
+            } else {throw new Error("Erro na requisição")}
         }catch(error){
             if(isNovoEvento){
                 params.handleErro(evento._id)
             }
             console.log(error)
             throw new Error('Erro ao tentar salvar o evento')}
-    
-    
     }
-    return{salvarEvento}
+
+    interface deletarEventoParams{
+        eventoId: string,
+        username: string;
+        handleErro: (eventoId: string) => void;
+    }
+    async function deletarEvento(params: deletarEventoParams){
+        const {username, eventoId} = params
+        try{
+            const req = await axios.post(`${url}/api/perfil/evento/deletar`,{
+                evento: {eventoId,
+                    username
+                }})
+            if(req.data.agenda){
+                const checarAgenda = req.data.agenda.agenda as {_id: string}[]
+                if(checarAgenda.find(evento => evento._id == eventoId)){
+                    params.handleErro(eventoId)
+                    throw new Error("O evento não foi deletado")
+                }
+
+            }else if(req.data.updated != 200){
+                throw new Error(`${req.data.updated}`)
+            } else {throw new Error("Erro na requisição")}
+        }catch(error){
+            console.log(error)
+            throw new Error('Erro ao tentar salvar o evento')}
+    }
+
+    return{salvarEvento, deletarEvento}
 }

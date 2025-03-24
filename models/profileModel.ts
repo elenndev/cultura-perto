@@ -14,6 +14,7 @@ const localEventoSchema = new mongoose.Schema({
     nomeLocal: {type:String, required: true},
     bairro: {type:String, required: true},
     rua: {type:String, required: true},
+    link: {type: String, required: true}
 })
 
 const linksEventoSchema = new mongoose.Schema({
@@ -23,7 +24,6 @@ const linksEventoSchema = new mongoose.Schema({
 
 const eventoSchema = new mongoose.Schema({
     nome: {type: String, required:true},
-    icon: {type: String},
     detalhes: {type: String, required:true},
     data: {type: Date, required:true},
     localidade: {type: localEventoSchema, required:true},

@@ -11,11 +11,11 @@ export async function POST(request: NextRequest){
 
         await connectMongoDB()
 
-        const {eventoId, username, ...eventoAlterado} = evento
+        const { eventoId, username } = evento
         const perfil = await PerfilArtisticoDB.findOne({username: username})
         const _id = perfil._id
 
-        console.log('itens separados','eventId:',eventoId, 'username', username,'resto que é o evento:', eventoAlterado)
+        console.log('itens separados','eventId:',eventoId, 'username', username)
 
 
         if(!perfil){
@@ -23,16 +23,16 @@ export async function POST(request: NextRequest){
         }
 
 
-        const eventoEditado = await PerfilArtisticoDB.findByIdAndUpdate(
-                    {_id, "agenda._id": eventoId},
-                    { $set: { "agenda.$": eventoAlterado } }, 
+        const atualizarAgenda = await PerfilArtisticoDB.findByIdAndUpdate(
+                    {_id},
+                    { $pull: { agenda: {_id: eventoId} } }, 
                     { new: true }
                 );
 
-        if(eventoEditado){
-            return NextResponse.json({updated: 200},{status: 200})
+        if(atualizarAgenda){
+            return NextResponse.json({agenda: atualizarAgenda},{status: 200})
         } else {
-            return NextResponse.json({updated: 'Nenhum evento encontrado para fazer a atualização'}, {status: 500})
+            return NextResponse.json({agenda: 'Nenhum evento encontrado para fazer a atualização'}, {status: 500})
         }
 
 

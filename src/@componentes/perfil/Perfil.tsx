@@ -12,7 +12,7 @@ interface perfilProps {
 }
 export function Perfil(props : perfilProps){
     const {perfil} = props
-    const {salvarEvento} = usePerfil()
+    const {salvarEvento, deletarEvento} = usePerfil()
     const [eventos, setEventos] = useState<null | TypeEvento[]>(perfil.agenda)
 
     function removerEvento(eventoId: string){
@@ -25,6 +25,25 @@ export function Perfil(props : perfilProps){
                 return  null
             }
         })
+    }
+    
+    function handleDeletarEvento(eventoId: string){
+        const guardarEvento = eventos?.find(evento => evento._id == eventoId)
+        if(!guardarEvento){
+            return toast.error("Problemas ao acessar o item para deletar")
+        }
+        removerEvento(eventoId)
+        
+        toast.promise(()=>deletarEvento({eventoId, username: perfil.username, handleErro: adicionarEvento}),
+        {error: `Erro ao tentar deletar o evento`,
+            pending: 'Deletando evento', success: 'Evento deletado com sucesso'
+        })
+
+        function adicionarEvento(){
+            //caso tenha algum erro na requisição para apagar o evento, 
+            //adicionar ele na lista novamente para que o usuário possa tentar novamente
+            setEventos(prev=> {prev?.push(guardarEvento!); return prev ?? [guardarEvento!]})
+        }
     }
 
     function handleSalvarEvento(evento: TypeEvento, isNovoEvento: boolean){
@@ -73,7 +92,8 @@ export function Perfil(props : perfilProps){
             <ToastContainer/>
             <p>@{perfil.nome}</p>
             <p>{perfil.descricao}</p>
-            <Agenda salvarEvento={handleSalvarEvento} eventos={eventos}/>
+            <Agenda salvarEvento={handleSalvarEvento} 
+            eventos={eventos} deletarEvento={handleDeletarEvento}/>
         </main>
     </ContextAuthProvider>
     </>)

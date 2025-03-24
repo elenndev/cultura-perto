@@ -8,6 +8,7 @@ import CriarEditarEvento from "./CriarEditarEvento";
 interface agendaProps {
     eventos: TypeEvento[] | null;
     salvarEvento: (evento: TypeEvento, isNovoEvento: boolean)=> void;
+    deletarEvento: (eventoId: string) => void;
 }
 export default function Agenda(props: agendaProps){
     const {eventos} = props
@@ -59,8 +60,12 @@ export default function Agenda(props: agendaProps){
                             <td>{evento.localidade.nomeLocal}</td>
                             <td>
                                 <button type="button" onClick={()=> abrirJanelaDoEvento(evento._id)}>Ver detalhes</button>
-                                {isLogged && (<button type="button"
-                                onClick={()=> setEditarEvento(evento)}>Editar</button>)}
+                                {isLogged && (<>
+                                    <button type="button"
+                                    onClick={()=> setEditarEvento(evento)}>Editar</button>
+                                    <button type='button'
+                                    onClick={()=> props.deletarEvento(evento._id)}>Deletar</button>
+                                    </>)}
                             </td>
                         </tr>
                     ))}
@@ -69,7 +74,8 @@ export default function Agenda(props: agendaProps){
             {eventoAberto && (
                 <JanelaEvento evento={eventoAberto} fecharJanela={fecharJanelaEvento}/>)}
         </>) : (<p>Nenhum evento no momento</p>)}
-            {isLogged && (<button type='button' onClick={()=> setCriarEvento(true)}>Adicionar novo evento</button>)}
+            {isLogged && (
+                <button type='button' onClick={()=> setCriarEvento(true)}>Adicionar novo evento</button>)}
             {isLogged && (criarEvento || editarEvento) && (
                 <CriarEditarEvento 
                 editarEvento={editarEvento} 

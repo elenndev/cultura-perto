@@ -23,6 +23,8 @@ export default function CriarEditarEvento(props : criarEventoProps){
         link: ''
     })
 
+
+
     const [editarCriarLink,setEditarCriarLink] =useState<null | TypeLinkEvento>(null)
 
     const [linksEvento, setLinksEvento] = useState<null | TypeLinkEvento[]>(
@@ -100,7 +102,7 @@ export default function CriarEditarEvento(props : criarEventoProps){
                     onChange={(e)=> setDetalhes(e.target.value)}></input>
 
                     <label htmlFor='data'>{editarEvento ? 'Editar data do evento' : 'Informe a data do evento'}</label>
-                    <input name='data' type="date" defaultValue={data?.toISOString().split("T")[0] ?? ''}
+                    <input name='data' type="date" defaultValue={data ? new Date(data).toISOString().split("T")[0] : ''}
                     onChange={(e)=>adicionarData(e.target.value)}></input>
 
                     <span className='localDoEvento flex flex-col'>
@@ -121,7 +123,7 @@ export default function CriarEditarEvento(props : criarEventoProps){
 
                         <label htmlFor='link'>Link da localização do local</label>
                         <input type='text' name='link' placeholder='Link da localização'
-                        value={localidade.link}
+                        defaultValue={localidade.link}
                         onChange={(e)=> setLocalidade(prev =>{ return {...prev, link: e.target.value}})}></input>
                     </span>
 
