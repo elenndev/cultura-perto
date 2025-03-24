@@ -23,8 +23,6 @@ export default function CriarEditarEvento(props : criarEventoProps){
         link: ''
     })
 
-
-
     const [editarCriarLink,setEditarCriarLink] =useState<null | TypeLinkEvento>(null)
 
     const [linksEvento, setLinksEvento] = useState<null | TypeLinkEvento[]>(

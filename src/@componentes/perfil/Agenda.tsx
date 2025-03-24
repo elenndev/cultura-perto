@@ -31,6 +31,7 @@ export default function Agenda(props: agendaProps){
 
     function handleSalvarEvento(evento: TypeEvento, isNovoEvento: boolean){
         setCriarEvento(false)
+        setEditarEvento(null)
         props.salvarEvento(evento, isNovoEvento)
     }
 
@@ -38,6 +39,7 @@ export default function Agenda(props: agendaProps){
         setCriarEvento(false)
         setEditarEvento(null)
     }
+
 
     return(<div className="agenda flex flex-col">
         <p>Agenda</p>

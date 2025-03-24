@@ -8,26 +8,28 @@ export function usePerfil(){
         evento: TypeEvento, 
         isNovoEvento: boolean,
         username: string;
-        atualizarId: (novoId: string) => void;
-        handleErro: (eventoId: string) => void
+        atualizarId: (antigoId: string, novoId: string) => void;
+        handleErro: (eventoId: string) => void;
+        handleSucesso: ()=> void;
     }
     async function salvarEvento(params: salvarEventoParams){
         const {evento, isNovoEvento, username, atualizarId} = params
         try{
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const {_id, ...eventoSemId} = evento
 
-            const eventoParaRequisicao = isNovoEvento ? eventoSemId : evento
+            const eventoParaRequisicao = isNovoEvento ? eventoSemId : {...evento, eventoId: _id}
 
             const req = await axios.post(`${url}/api/perfil/evento/${isNovoEvento ? 'criar' : 'editar'}`,{
                 evento: {...eventoParaRequisicao,
                     username
                 }})
-            if(req.data.updated.novoId){
-                atualizarId(req.data.updated.novoId)
+            if(req.data.updated.novoId || req.data.updated == 200){
+                params.handleSucesso()
+                if(req.data.updated.novoId){atualizarId(_id,req.data.updated.novoId)}
+                
             }else if(req.data.updated != 200){
-                throw new Error(`${req.data.updated}`)
-            } else {throw new Error("Erro na requisição")}
+                throw new Error(`Erro na requisição ${req.data.updated ?? ''}`)
+            }
         }catch(error){
             if(isNovoEvento){
                 params.handleErro(evento._id)
