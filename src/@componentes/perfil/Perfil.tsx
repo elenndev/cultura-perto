@@ -88,7 +88,6 @@ export function Perfil(props : perfilProps){
         })
 
         function atualizarId(antigoId: string, novoId: string){
-            console.log('funcao atualziar id, id antigo e novo', antigoId, novoId)
             setEventos(prev =>{
                 const listaAtualizada = prev?.map(prevItem =>{
                     if(prevItem._id == antigoId){
@@ -97,7 +96,6 @@ export function Perfil(props : perfilProps){
                         return prevItem
                     }
                 }) ?? prev
-                console.log('ai a lsita atualizada: ',listaAtualizada)
                 return listaAtualizada
             })
         }

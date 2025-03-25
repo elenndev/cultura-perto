@@ -41,7 +41,10 @@ export default function Agenda(props: agendaProps){
     }
 
 
-    return(<div className="agenda flex flex-col">
+    return(
+    <>
+    {eventoAberto && (<JanelaEvento evento={eventoAberto} fecharJanela={fecharJanelaEvento}/>)}
+    <div className="agenda flex flex-col">
         <p>Agenda</p>
         {eventos ? (<>
             <table>
@@ -73,8 +76,7 @@ export default function Agenda(props: agendaProps){
                     ))}
                 </tbody>
             </table>
-            {eventoAberto && (
-                <JanelaEvento evento={eventoAberto} fecharJanela={fecharJanelaEvento}/>)}
+            
         </>) : (<p>Nenhum evento no momento</p>)}
             {isLogged && (
                 <button type='button' onClick={()=> setCriarEvento(true)}>Adicionar novo evento</button>)}
@@ -83,5 +85,7 @@ export default function Agenda(props: agendaProps){
                 editarEvento={editarEvento} 
                 salvarEvento={handleSalvarEvento}
                 cancelar={cancelarCriacaoEdicaoEvento}/>)}
-    </div>)
+    </div>
+    </>
+)
 }
