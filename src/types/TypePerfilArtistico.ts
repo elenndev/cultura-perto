@@ -14,7 +14,7 @@ export type TypePerfilArtistico = {
 }
 
 export type TypeLinksPerfil = {
-    nome: 'Spotify' | 'Instagram' | 'X' | 'Facebook' | 'Youtube' | 'Soundcloud' | {outro: {nome: string}}; 
+    nome: 'Spotify' | 'Instagram' | 'X' | 'Facebook' | 'Youtube' | 'Soundcloud' | 'Link externo'; 
     link: string;
 }
 

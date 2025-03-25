@@ -5,16 +5,20 @@ import { ContextAuthProvider } from "../../context/ContextAuth";
 import { toast, ToastContainer } from "react-toastify";
 import { usePerfil } from "@/@hooks/usePerfil";
 import { useState } from "react";
+import * as S from '@/styles/Styles'
+import EditarPerfil from "./EditarPerfil";
+
 
 interface perfilProps {
     perfil: TypePerfilArtistico;
     isLogged: false | {id: string};
 }
 export function Perfil(props : perfilProps){
-    const {perfil} = props
     const {salvarEvento, deletarEvento} = usePerfil()
+    const [perfil, setPerfil] = useState(props.perfil)
     const [eventos, setEventos] = useState<null | TypeEvento[]>(perfil.agenda)
     const [eventoSendoEditadoRegistrado, setEventoSendoEditadoRegistrado] = useState(false) 
+    const [editarPerfil, setEditarPerfil] = useState<false | TypePerfilArtistico>(false)
 
     function removerEvento(eventoId: string){
         //remove Evento da lista seja por erro na criação ou se o usuário deletou o evento
@@ -98,11 +102,27 @@ export function Perfil(props : perfilProps){
             })
         }
     }
+    function fecharEditarPerfil(){
+        setEditarPerfil(false)
+    }
+
+    function atualizarPerfil(perfilAtualizado: TypePerfilArtistico){
+        setPerfil(perfilAtualizado)
+    }
 
     return(<>
     <ContextAuthProvider isLogged={props.isLogged}>
         <main className="w-screen h-screen relative">
             <ToastContainer/>
+            
+        {editarPerfil ? (
+            <S.ModalHolder>
+                <S.ModalContainer>
+                    <EditarPerfil perfilArtistico={perfil} fecharJanela={fecharEditarPerfil} atualizarPerfil={atualizarPerfil}/>
+                </S.ModalContainer>
+            </S.ModalHolder>
+        ):(<>
+            {props.isLogged && (<button type="button" onClick={()=> setEditarPerfil(perfil)}>Editar perfil</button>)}
             <p>{perfil.nome}</p>
             <p>@{perfil.username}</p>
             <p>{perfil.localidade.cidade} - {perfil.localidade.estado}</p>
@@ -110,6 +130,7 @@ export function Perfil(props : perfilProps){
             <p>{perfil.descricao}</p>
             <Agenda salvarEvento={handleSalvarEvento} 
             eventos={eventos} deletarEvento={handleDeletarEvento}/>
+        </>)}
         </main>
     </ContextAuthProvider>
     </>)

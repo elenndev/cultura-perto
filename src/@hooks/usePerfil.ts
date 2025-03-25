@@ -1,4 +1,4 @@
-import { TypeEvento } from "@/types"
+import { TypeEvento, TypePerfilArtistico } from "@/types"
 import axios from "axios"
 
 const url = process.env.NEXT_PUBLIC_APP_URL
@@ -38,6 +38,7 @@ export function usePerfil(){
             throw new Error('Erro ao tentar salvar o evento')}
     }
 
+
     interface deletarEventoParams{
         eventoId: string,
         username: string;
@@ -65,5 +66,34 @@ export function usePerfil(){
             throw new Error('Erro ao tentar salvar o evento')}
     }
 
-    return{salvarEvento, deletarEvento}
+    interface editarContaParams {
+        perfil: TypePerfilArtistico;
+        novoUsername: boolean;
+        atualizar: ()=>void;
+    }
+    async function editandoConta(params: editarContaParams){
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const {_id, ...perfilEditado} = params.perfil
+        if(params.novoUsername){
+            const reqChecarUsernameEmail = await axios.get(`${url}/api/user`, { params: { username: params.novoUsername } });
+            if(reqChecarUsernameEmail.data.user && ['email indisponivel','username indisponivel','email e nome de usuario indisponivel'].includes(reqChecarUsernameEmail.data.user)){
+                throw new Error("Esse nome de usuário não está disponível, por favor tente outro")
+            }
+        } 
+
+        try{
+            const req = await axios.post(`${url}/api/perfil/editar`,{
+                perfil: perfilEditado,
+                username: params.perfil.username})
+            if(req.data.updated == 200){
+                params.atualizar()
+            } else {
+                throw new Error("Erro na requisição")
+            }
+        }catch(error){
+            console.log(error)
+            throw new Error('Erro ao tentar salvar as mudanças no perfil')}
+    }
+
+    return{salvarEvento, deletarEvento, editandoConta}
 }
