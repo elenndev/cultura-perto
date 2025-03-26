@@ -16,8 +16,6 @@ export async function POST(request: NextRequest){
         const perfil = await PerfilArtisticoDB.findOne({username: username})
         const _id = perfil._id
 
-        console.log('itens separados','eventId:',eventoId, 'username', username,'resto que é o evento:', eventoAlterado)
-
 
         if(!perfil){
             throw new Error()

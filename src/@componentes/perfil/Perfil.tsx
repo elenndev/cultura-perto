@@ -7,11 +7,12 @@ import { usePerfil } from "@/@hooks/usePerfil";
 import { useState } from "react";
 import * as S from '@/styles/Styles'
 import EditarPerfil from "./EditarPerfil";
+import Header from "../Header";
 
 
 interface perfilProps {
     perfil: TypePerfilArtistico;
-    isLogged: false | {id: string};
+    isLogged: false | {id: string, username: string};
 }
 export function Perfil(props : perfilProps){
     const {salvarEvento, deletarEvento} = usePerfil()
@@ -110,9 +111,9 @@ export function Perfil(props : perfilProps){
 
     return(<>
     <ContextAuthProvider isLogged={props.isLogged}>
-        <main className="w-screen h-screen relative">
+        <main className="w-screen h-screen relative flex flex-col">
             <ToastContainer/>
-            
+            <Header username={props.isLogged ? props.isLogged.username : null}/>
         {editarPerfil ? (
             <S.ModalHolder>
                 <S.ModalContainer>

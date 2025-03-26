@@ -20,8 +20,6 @@ export async function POST(request: NextRequest){
             { new: true }
         );
 
-        console.log('atualziado rou /criar', novoEvento)
-
 
         if(novoEvento){
             return NextResponse.json({updated: {novoId: novoEvento._id}}, {status: 200})

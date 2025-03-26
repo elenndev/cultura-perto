@@ -11,7 +11,6 @@ async function obterDadosPerfilArtistico(username: string){
     try{
         const req = await axios.get(`${url}/api/perfil`,{params:{username}})
     if(req.data.perfil){
-        console.log('dados no page.tsx:', req.data.perfil)
         return req.data.perfil as TypePerfilArtistico
     }else{ return null }
 
@@ -38,7 +37,7 @@ export default async function Page(props : {params: Params}) {
     return(<p>Perfil não encontrado</p>)
     }
     const session = await getSessionData()
-    const isLogged = session ? session.user as {id: string} : false
+    const isLogged = session ? session.user as {id: string, username: string} : false
 
     return (<>
     <Suspense fallback={<p>Carregando perfil...</p>}>

@@ -1,21 +1,18 @@
 'use client'
 import { darkTheme, GlobalStyles, lightTheme } from '@/styles/themeConfig';
 import { ThemeProvider} from 'styled-components';
-import { Button_LogOut } from '../Button_LogOut';
 import { useThemeContext } from '@/context/ContextTheme';
-import { ThemeToggleButton } from '../ThemeToggleButton';
 import { useState } from 'react';
 import { useHomepage } from '@/@hooks/useHomepage';
 import { TypePerfilArtistico } from '@/types';
 import ListaArtistas from './ListaArtistas';
 import { FiltrarBusca } from './FiltrarBusca';
 import { toast, ToastContainer } from 'react-toastify';
-type homepageProps<S> = {
-    userSession: S | null;
-}
-export const Homepage = <S,>({userSession} : homepageProps<S> )=>{
+import Header from '../Header';
+
+
+export const Homepage = ({username} : {username: string | null} )=>{
     const {buscarArtistas} = useHomepage()
-    console.log(userSession)
     const { theme } = useThemeContext();
     const [janelaFiltros, setJanelaFiltros] = useState(true)
     const [loading, setLoading] = useState(false)
@@ -48,12 +45,11 @@ export const Homepage = <S,>({userSession} : homepageProps<S> )=>{
     return(
         <ThemeProvider theme={currentTheme}>
                 <GlobalStyles/>
-                <main className='w-screen h-screen relative'>
+                <main className='w-screen h-screen relative flex flex-col items-center justify-center'>
                     <ToastContainer/>
                     {loading ? (<p>Carregando</p>) : (
                         <div>
-                            <ThemeToggleButton />
-                            <Button_LogOut />
+                            <Header username={username}/>
                             {janelaFiltros && (<FiltrarBusca buscar={handleBuscar}/>)}
                             {perfis && perfis.length > 0 &&(<ListaArtistas artistas={perfis}/>)}
                             {perfis?.length == 0 && (

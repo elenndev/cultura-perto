@@ -1,15 +1,17 @@
 'use client'
 import ConfigurarPerfil from "@/@componentes/criar_conta/configurar_perfil/ConfigurarPerfil";
 import CriarConta from "@/@componentes/criar_conta/CriarConta";
-import { useCriarConta } from "@/@componentes/criar_conta/useCriarConta";
+import { useConta } from "@/@hooks/useConta";
 import Modal_Loading from "@/@componentes/modals/Modal_Loading";
 import { TypePerfilArtistico } from "@/types";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import Header from "@/@componentes/Header";
+import { ThemeContextProvider } from "@/context/ContextTheme";
 
 export default function Page(){
-    const { registrarNovoUsuario } = useCriarConta()
+    const { registrarNovoUsuario } = useConta()
     const [modalLoadingAberto, setModalLoadingAberto] = useState<false | {content: string}>(false)
     const [novoUsuario, setNovoUsuario] = useState<null | {username: string, email: string, password: string}>(null)
     const [configurarDetalhes, setConfigurarDetalhes] = useState(false)
@@ -54,16 +56,20 @@ export default function Page(){
         finalizarCriarConta(perfil)
     }
 
-    return(<main className="h-full w-full flex flex-col relative">
-        <ToastContainer/>
-
-        {modalLoadingAberto && (<Modal_Loading content={modalLoadingAberto.content}/>)}
-        {!configurarDetalhes && (<>
-            <CriarConta irParaOsDetalhes={irParaOsDetalhes}/>
-        </>)}
-        {configurarDetalhes && novoUsuario && (<>
-            <ConfigurarPerfil registrarPerfil={registrarPerfil} username={novoUsuario.username}/>
-        </>
-            )}
-    </main>)
+    return(
+        <ThemeContextProvider>
+        <main className="h-full w-full flex flex-col relative">
+            <ToastContainer/>
+            <Header username={null}/>
+            {modalLoadingAberto && (<Modal_Loading content={modalLoadingAberto.content}/>)}
+            {!configurarDetalhes && (<>
+                <CriarConta irParaOsDetalhes={irParaOsDetalhes}/>
+            </>)}
+            {configurarDetalhes && novoUsuario && (<>
+                <ConfigurarPerfil registrarPerfil={registrarPerfil} username={novoUsuario.username}/>
+            </>
+                )}
+        </main>
+        </ThemeContextProvider>
+    )
 }
