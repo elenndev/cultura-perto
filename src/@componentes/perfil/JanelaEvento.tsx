@@ -1,5 +1,6 @@
 import { TypeEvento } from "@/types";
 import { nanoid } from "nanoid";
+import  * as S from '@/styles/Styles'
 
 interface janelaEventoProps {
     evento: TypeEvento;
@@ -8,27 +9,27 @@ interface janelaEventoProps {
 export default function JanelaEvento(props: janelaEventoProps){
     const {evento} = props
     return(
-        <span className="janelaHolder flex flex-col bg-gray-600 absolute h-full w-full items-center justify-center">
-            <div className="janelaEvento bg-white flex flex-col w-[300px] items-center justify-center">
-                <div className="janelaEvento-header bg-gray-800 text-white w-full">
-                    {evento.nome}
-                    <button type="button" onClick={()=> props.fecharJanela()}>Fechar</button>
-                    </div>
-                <div className="janelaEvento-body">
+        <S.ModalHolder>
+            <S.ModalContainer className='w-[80vw]'>
+                <S.ModalHeader className='relative flex-wrap'>
+                    Evento: {evento.nome}
+                    <button className='absolute right-1.5' type="button" onClick={()=> props.fecharJanela()}>Fechar</button>
+                    </S.ModalHeader>
+                <S.ModalContent className='p-2'>
                     <p>{new Date(evento.data).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
                     <p>{evento.detalhes}</p>
                     {evento.linksEvento && (<>
-                        <p>links do evento</p>
+                        <h3 className="bold">Links do evento</h3>
                         <ul>
                             {evento.linksEvento.map(link =><li key={nanoid()}>
-                                <a href={link.link}>{link.nome}</a>
+                                <S.Button_Secundario as='a' href={link.link}>{link.nome}</S.Button_Secundario>
                             </li>)}
                         </ul>
                     </>)}
-                    <a href={evento.localidade.link}
-                    className='bg-purple-700 text-white'>Localização</a>
-                </div>
-            </div>
-        </span>
+                    <S.Button_Principal as='a' href={evento.localidade.link}
+                    className='bg-purple-700 text-white'>Localização</S.Button_Principal>
+                </S.ModalContent>
+            </S.ModalContainer>
+        </S.ModalHolder>
     )
 }

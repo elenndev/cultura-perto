@@ -1,44 +1,49 @@
 'use client'
 import { TypeLinkEvento } from "@/types"
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+import  {  InputSpan  } from '@/styles/Styles'
 
 interface linkDoEventoProps{
-    linkEvento: (TypeLinkEvento); 
-    salvarLink: (link: TypeLinkEvento) => void;
-    cancelar: () => void;
+    linkEvento: TypeLinkEvento;
+    setLinksEvento: Dispatch<SetStateAction<TypeLinkEvento[]>>;
 }
 export default function NewLinkDoEvento(props: linkDoEventoProps){
-    const {salvarLink} = props
-    const [nome, setNome] = useState(props.linkEvento.nome)
-    const [link, setLink] = useState(props.linkEvento.link)
-    const [erro, setErro] = useState(false)
+    const {setLinksEvento, linkEvento} = props
 
-    function handleAdicionarLink(){
-        if(nome == ""  && link == ""){
-            setErro(true)
-        } else {
-            salvarLink({nome, link, _id: props.linkEvento._id})
-        }
-    }
-
-    return (<div className="adicionarLink flex flex-col">
-        <span className="flex flex-wrap flex-row">
-            <label htmlFor='nomeLink'>Nome do link <i>{'Exemplo: "Website do evento", "Confirmar presença", "Comprar ingresso"'}</i></label>
-            <input type="text" name='nomeLink' placeholder="Nome"
-            value={nome}
-            onChange={(e) => {if(erro){setErro(false)};setNome(e.target.value)}}></input>
-            
+    return (<div className="adicionarLink items-center flex flex-col bg-[#eee9df] border-[#ffb162] border-2 rounded-3xl p-2">
+        <InputSpan className='bg-[white] rounded-3xl px-2'>
+            <label htmlFor='nomeLink' className='flex flex-wrap max-w-[90%]'>Nome do link</label>
+            <input type="text" name='nomeLink' placeholder="Nome do link" title='Nome do que o link se refere, exemplo "Website do evento", "Confirmar presença" "Comprar ingresso"'
+            value={linkEvento.nome}
+            onChange={(e) => {setLinksEvento(prev =>{
+                if(prev){
+                    const listaAtualizada = prev.map(item =>{ 
+                        if(item._id == linkEvento._id){
+                            item.nome = e.target.value
+                        }
+                        return item
+                    })
+                    return listaAtualizada
+                }else {return prev}
+            })}}></input>
+        </InputSpan>
+        
+        <InputSpan className='bg-[white] rounded-3xl px-2'>
             <label htmlFor='link'>Link</label>
             <input type="url" name='link' placeholder="Link"
-            value={link}
-            onChange={(e)=> {if(erro){setErro(false)};setLink(e.target.value)}}></input>
-        </span>
-
-        {erro && (<p className="w-full text-red-500">Informe o nome do link e o link do evento</p>)}
-
-        {link.length > 5 && nome != '' && (
-            <button type='button' onClick={()=> handleAdicionarLink()}>Salvar link</button>
-        )}
-        <button type='button' onClick={()=> props.cancelar()}>Cancelar</button>
+            value={linkEvento.link}
+            onChange={(e)=> {setLinksEvento(prev =>{
+                if(prev){
+                    const listaAtualizada = prev.map(item =>{ 
+                        if(item._id == linkEvento._id){
+                            item.link = e.target.value
+                        }
+                        return item
+                    })
+                    return listaAtualizada
+                }else {return prev}
+            })}}></input>
+        </InputSpan>
+        
     </div>)
 }

@@ -4,6 +4,14 @@ import { useState } from "react";
 import DefinirLocalidade from "../criar_conta/configurar_perfil/DefinirLocalidade";
 import { toast } from "react-toastify";
 import { usePerfil } from "@/@hooks/usePerfil";
+import * as S from "@/styles/StyledEditarPerfil"
+import { IconContext } from "react-icons";
+import { MdAccountCircle } from "react-icons/md";
+import { FaRegEdit } from "react-icons/fa";
+import IconeRedeSocial from "./IconeRedeSocial";
+import { nanoid } from "nanoid";
+import EditarLinkPerfil from "./EditarLinkPerfil";
+import { PerfilHeader } from "@/styles/StyledPerfil";
 
 interface editarPerfilProps {
     perfilArtistico: TypePerfilArtistico;
@@ -12,8 +20,10 @@ interface editarPerfilProps {
 }
 export default function EditarPerfil(props: editarPerfilProps){
     const {editandoConta} = usePerfil()
-    const [localidade, setLocalidade] = useState(props.perfilArtistico.localidade)
+    const [tela, setTela] = useState<null | string >(null)
+    const [telaLinks, setTelaLinks ] = useState<null | {nome: string, link: string}>(null)
 
+    const [localidade, setLocalidade] = useState(props.perfilArtistico.localidade)
     const [username, setUsername] = useState(props.perfilArtistico.username)
     const [nome, setNome] = useState(props.perfilArtistico.nome)
     const [area, setArea] = useState<'musica'| 'cenica' |'artesanato'>(props.perfilArtistico.area)
@@ -42,8 +52,7 @@ export default function EditarPerfil(props: editarPerfilProps){
         }
     }
 
-
-    const handleSubmit = async (e: React.FormEvent) => {
+    async function handleSubmit(e: React.FormEvent){
             e.preventDefault();
             setError("");
             props.fecharJanela()
@@ -78,93 +87,129 @@ export default function EditarPerfil(props: editarPerfilProps){
     
     
     
-        };
+    };
+
 
     return(
-    <div className='flex flex-col'>
-        <button type='button' onClick={()=> props.fecharJanela()}>Fechar</button>
-        <form onSubmit={handleSubmit}>
-            <span className='flex flex-row'>
-                <label htmlFor='nome'>Nome</label>
-                <input name='nome' placeholder="nome" defaultValue={nome}
-                onChange={(e)=> setNome(e.target.value)}></input>
-            </span>
+    <>
+        <S.ModalHeader className='flex flex-row justify-center'>
+            <p>Editando perfil</p>
+        </S.ModalHeader>
+        <S.ModalContent>
+            <form onSubmit={handleSubmit} className='grid grid-col-1 w-full grid-rows-[auto_auto_auto] md:grid-col-[auto_auto] md:grid-rows-2 gap-1 p-4'>
+                <S.AreaPreviaPerfil>
+                    <PerfilHeader className='rounded-3xl p-2'/>
+                    <p className='p-3 mt-1.5 z-20 w-[90%] bg-[#0000006e] text-white rounded-3xl shadow-2xs'>Selecione a <span className='border-2 border-[#ffb162] border-solid rounded-3xl p-1'>informação</span> que você deseja editar</p>
+                    <S.Tag className={`tag ${tela == 'nome' && 'editando'}`} onClick={()=> {setTelaLinks(null);setTela('nome')}}>
+                            {nome}
+                            <IconEditar/>
+                        </S.Tag>
+                    <span className='z-20 shadow-xl rounded-[50%] p-2'>
+                        <IconContext.Provider value={{size: "5rem", color: "white" }}>
+                            <MdAccountCircle />
+                        </IconContext.Provider>
+                    </span>
+                    <S.Tag className={`tag ${tela == 'username' && 'editando'} z-20 mb-1`}  onClick={()=> setTela('username')}>
+                        @{username}
+                        <IconEditar/>
+                    </S.Tag>
 
-            <span className='flex flex-row'>
-                <label htmlFor='username'>Nome de usuário</label>
-                <input name='username' placeholder="Nome de usuário" defaultValue={username}
-                onChange={(e)=> setUsername(e.target.value)}></input>
-            </span>
+                    <div className='tagsEditar w-full justify-center gap-2 flex flex-wrap z-20'>
+                        <S.Tag className={`tag ${tela == 'tipo' && 'editando'}`} onClick={()=> {setTelaLinks(null);setTela('tipo')}}>
+                            {tipo}
+                            <IconEditar/>
+                        </S.Tag>
 
-            <span className='flex flex-row'>
-                <label htmlFor='descricao'>Descrição</label>
-                <input name='descricao' placeholder="Descrição" defaultValue={descricao}
-                onChange={(e)=> setDescricao(e.target.value)}></input>
-            </span>
+                        <S.Tag className={`tag ${tela == 'localidade' && 'editando'}`} onClick={()=> {setTelaLinks(null);setTela('localidade')}}>
+                            {localidade.cidade} - {localidade.estado}
+                            <IconEditar/>
+                        </S.Tag>
 
-            <span className='flex flex-col'>
-                <p>No momento seu perfil está marcado como um perfil {tipo == 'grupo' ? 'de grupo' : 'individual'}</p>
-                <button type='button' onClick={()=> setTipo(prev => {return prev == 'grupo' ? 'individual' : 'grupo'})}>Mudar para m perfil {tipo == 'grupo' ? 'individual' : 'de grupo'}</button>
-            </span>
+                        <S.Tag className={`tag ${tela == 'area' && 'editando'}`} onClick={()=> {setTelaLinks(null);setTela('area')}}>
+                            {area}
+                            <IconEditar/>
+                        </S.Tag>
+                    </div>
+                    <div className='links w-full justify-center flex flex-wrap z-20 gap-2 mb-2 mt-2'>
+                        {Object.entries(links).map(([nome, url]) =>(
+                            <S.Tag key={nanoid()} onClick={()=> {setTela('links');setTelaLinks({nome, link: url})}}>
+                                <IconContext.Provider value={{size: "1rem"}}>
+                                    <IconeRedeSocial nome={nome.toLowerCase()}/>
+                                </IconContext.Provider>
+                                <p className='ml-2'>{nome}</p>
+                            </S.Tag>
+                        ))}
+                    </div>
+                </S.AreaPreviaPerfil>
 
-            <DefinirLocalidade cidadeSelecionada={localidade.cidade}
-            estadoSelecionado={localidade.estado}
-            handleInformarLocalidade={handleInformarLocalidade}/>
-            <ul>
-                <li><button className={`area ${area == 'musica' ? 'bg-amber-300 text-white' : ''}`} type="button" onClick={()=> setArea('musica')}>Música</button></li>
-                <li><button className={`area ${area == 'artesanato' ? 'bg-amber-300 text-white' : ''}`} type="button" onClick={()=> setArea('artesanato')}>Artesanato</button></li>
-                <li><button className={`area ${area == 'cenica' ? 'bg-amber-300 text-white' : ''}`} type="button" onClick={()=> setArea('cenica')}>Cênica</button></li>
-            </ul>
+                <div className='editarInputsArea items-center flex flex-col md:w-1/2 h-[50%]'>
+                    {tela == 'nome' && (
+                        <S.InputSpan>
+                            <label htmlFor='nome'>Nome</label>
+                            <input name='nome' placeholder="nome" defaultValue={nome}
+                            onChange={(e)=> setNome(e.target.value)}></input>
+                        </S.InputSpan>
+                    )}
 
-            <span className='flex flex-col'>
-            {area !== 'artesanato' && (<>
-                <span className="spotify">
-                    <label htmlFor="spotify">Spotify</label>
-                    <input name="spotify" type="text" placeholder="Adicionar link do seu perfil do spotify"
-                    defaultValue={links.Spotify}
-                    onChange={(e)=>{setError("");setLinks(links => {links.Spotify = e.target.value; return links})}}></input>
+                    {tela == 'username' && (
+                        <S.InputSpan>
+                            <label htmlFor='username'>Nome de usuário</label>
+                            <input name='username' placeholder="Nome de usuário" defaultValue={username}
+                            onChange={(e)=> setUsername(e.target.value)}></input>
+                        </S.InputSpan>
+                    )}
+
+                    {tela == 'tipo' &&(
+                        <S.InputSpan className='mb-5 mt-5 w-full flex flex-col items-center'>
+                            <p>No momento seu perfil está marcado como um perfil {tipo == 'grupo' ? 'de grupo' : 'individual'}</p>
+                            <S.Button_Principal type='button' onClick={()=> setTipo(prev => {return prev == 'grupo' ? 'individual' : 'grupo'})}>Mudar para um perfil {tipo == 'grupo' ? 'individual' : 'de grupo'}</S.Button_Principal>
+                        </S.InputSpan>
+                    )}
+
+                    {tela == 'localidade' && (
+                        <DefinirLocalidade cidadeSelecionada={localidade.cidade}
+                        estadoSelecionado={localidade.estado}
+                        handleInformarLocalidade={handleInformarLocalidade}/>
+                    )}
+
+                    {tela == 'area' && (
+                        <S.SelecionarOpcoes className='flex w-full items-center justify-center flex-col'>
+                            <p>Área artística</p>
+                            <ul className='gap-y-2 justify-center items-center flex flex-col'>
+                                <li><S.Button className={`area ${area == 'musica' && 'selecionado'}`} type="button" onClick={()=> setArea('musica')}>Música</S.Button></li>
+                                <li><S.Button className={`area ${area == 'artesanato' && 'selecionado'}`} type="button" onClick={()=> setArea('artesanato')}>Artesanato</S.Button></li>
+                                <li><S.Button className={`area ${area == 'cenica' && 'selecionado'}`} type="button" onClick={()=> setArea('cenica')}>Cênica</S.Button></li>
+                            </ul>
+                        </S.SelecionarOpcoes>
+                    )}
+
+                    {tela == 'links' && telaLinks && (
+                        <EditarLinkPerfil setLinks={setLinks} link={{nome: telaLinks.nome, url: telaLinks.link}} setError={setError}/>
+                    )}
+
+                    {tela == 'descricao' && (
+                        <S.InputSpan>
+                            <label htmlFor='descricao'>Descrição</label>
+                            <input name='descricao' placeholder="Descrição" defaultValue={descricao}
+                            onChange={(e)=> setDescricao(e.target.value)}></input>
+                        </S.InputSpan>
+                    )}
+                {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+                </div>
+                <span className='buttonsArea md:col-span-2 flex flex-col items-center gap-1'>
+                    <S.Button_OK>Salvar alterações</S.Button_OK>
+                    <S.Button_Danger type='button' onClick={()=> props.fecharJanela()}>Cancelar</S.Button_Danger>
                 </span>
-                <span className="soundcloud">
-                    <label htmlFor="soundcloud">Soundcloud</label>
-                    <input name="soundcloud" type="text" placeholder="Adicionar link do seu perfil do soundcloud"
-                    defaultValue={links.Soundcloud}
-                    onChange={(e)=>{setError("");setLinks(links => {links.Soundcloud = e.target.value; return links})}}></input>
-                </span>
-            </>)}
-            <span className="instagram">
-                <label htmlFor="instagram">Instagram</label>
-                <input name="instagram" type="text" placeholder="Adicionar link do seu perfil do instagram"
-                defaultValue={links.Instagram}
-                onChange={(e)=>{setError("");setLinks(links => {links.Instagram = e.target.value; return links})}}></input>
-            </span>
-            <span className="X">
-                <label htmlFor="X">X</label>
-                <input name="X" type="text" placeholder="Adicionar link do seu perfil do X"
-                defaultValue={links.X}
-                onChange={(e)=>{setError("");setLinks(links => {links.X = e.target.value; return links})}}></input>
-            </span>
-            <span className="facebook">
-                <label htmlFor="facebook">Facebook</label>
-                <input name="facebook" type="text" placeholder="Adicionar link do seu perfil do facebook"
-                defaultValue={links.Facebook}
-                onChange={(e)=>{setError("");setLinks(links => {links.Facebook = e.target.value; return links})}}></input>
-            </span>
-            <span className="youtube">
-                <label htmlFor="youtube">Youtube</label>
-                <input name="youtube" type="text" placeholder="Adicionar link do seu perfil do youtube"
-                defaultValue={links.Youtube}
-                onChange={(e)=>{setError("");setLinks(links => {links.Youtube = e.target.value; return links})}}></input>
-            </span>
-            <span className="linkExterno">
-                <label htmlFor="linkExterno">Outro link</label>
-                <input name="linkExterno" type="text" placeholder="Adicionar outro tipo de link do seu perfil  (Exemplo: website)"
-                defaultValue={links.LinkExterno}
-                onChange={(e)=>{setError("");setLinks(links => {links.LinkExterno = e.target.value; return links})}}></input>
-            </span>
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        </span>
-                <button type='submit'>Salvar alterações</button>
-        </form>
 
-    </div>)
+            </form>
+        </S.ModalContent>
+    </>)
+}
+
+function IconEditar(){
+    return(
+        <IconContext.Provider value={{size: "1rem", className: 'icon ml-1' }}>
+            <FaRegEdit/>
+        </IconContext.Provider>
+    )
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import NewLinkDoEvento from "./NewLinkDoEvento";
 import { nanoid } from "nanoid";
 import * as S from '@/styles/Styles'
+import { toast } from "react-toastify";
 
 interface criarEventoProps {
     editarEvento: TypeEvento | null;
@@ -12,6 +13,10 @@ interface criarEventoProps {
 }
 export default function CriarEditarEvento(props : criarEventoProps){
     const { editarEvento, salvarEvento, cancelar} = props
+
+    const [tela, setTela] = useState(1)
+
+
     const eventoId = editarEvento?._id ?? nanoid()
     const [nome, setNome] = useState<null | string>(editarEvento?.nome ?? null)
     const [detalhes, setDetalhes] = useState<null | string>(editarEvento?.detalhes ?? null)
@@ -23,51 +28,25 @@ export default function CriarEditarEvento(props : criarEventoProps){
         link: ''
     })
 
-    const [editarCriarLink,setEditarCriarLink] =useState<null | TypeLinkEvento>(null)
+    const [linksEvento, setLinksEvento] = useState<TypeLinkEvento[]>(
+        editarEvento?.linksEvento && editarEvento?.linksEvento.length > 0 ? editarEvento.linksEvento
+        : [{nome: "", link: "", _id: nanoid()}])
 
-    const [linksEvento, setLinksEvento] = useState<null | TypeLinkEvento[]>(
-        editarEvento?.linksEvento ? 
-            editarEvento.linksEvento.map(link => {const linkFormatado = {...link, id: nanoid()} as TypeLinkEvento & {id: string}; return linkFormatado }) 
-        : null)
 
     function adicionarData(dataString: string){
         const data = new Date(dataString)
         setData(data)
     }
-
-    function salvarLink(link: TypeLinkEvento){
-        setEditarCriarLink(null)
-        setLinksEvento(prev =>{
-            const listaAtualizada = prev?.map(item => {
-                if(item._id == link._id){
-                    return link
-                } else { return item}
-            }) ?? prev
-            return listaAtualizada
-        })
-    }
-
-    function editarLink(link: TypeLinkEvento){
-        setEditarCriarLink(link)
-    }
-
-    function cancelarEditarCriarLink(){
-        setEditarCriarLink(null)
-    }
-
-    function deletarLink(link: TypeLinkEvento){
-        setLinksEvento(prev => {
-            prev?.filter(item => item._id == link._id)
-            if(prev?.length == 0){ prev = null}
-            return prev
-        })
-    }
     
     function adicionarMaisLinks(){
-        setEditarCriarLink({
-            nome: '',
-            link: '',
-            _id: nanoid()})
+        setLinksEvento(prev =>{
+            const novoLink = {nome: "", link: "", _id:nanoid()}
+            if(prev){
+                prev.push(novoLink)
+                return prev
+            } else {
+                return [novoLink]}
+        })
     }
 
     function handleSalvarEvento(e: React.FormEvent){
@@ -83,71 +62,100 @@ export default function CriarEditarEvento(props : criarEventoProps){
             }
             
             salvarEvento(evento, editarEvento ? false : true)
+        } else{
+            toast.error("Por favor preencha todos os campos")
         }
     }
 
     return(
         <S.ModalHolder>
-            <S.ModalContainer>
-                <button type="button" onClick={()=>cancelar()}>Cancelar</button>
-                <form onSubmit={(e)=> handleSalvarEvento(e)}>
-                    <label htmlFor='nome'>{editarEvento ? 'Mudar nome do evento' : 'Informe o nome do evento'}</label>
-                    <input name='nome' placeholder='Nome do evento' type='text' defaultValue={nome ?? ''}
-                    onChange={(e)=> setNome(e.target.value)}></input>
+            <S.ModalContainer className='w-[80vw]'>
+                <S.ModalHeader className='relative py-3'>
+                    {editarEvento ? `Editando evento: ${editarEvento.nome}` : 'Criando novo evento'}
+                    <button className='absolute right-2.5' type="button" onClick={()=>cancelar()}>Cancelar</button>
+                </S.ModalHeader>
+                <S.ModalContent className='w-[90%]'>
+                    <form onSubmit={(e)=> handleSalvarEvento(e)} className='flex flex-col gap-4 justify-center px-4 py-3'>
+                        {tela == 1 && (<>
+                            <S.InputSpan>
+                                <label htmlFor='nome'>{editarEvento ? 'Mudar nome do evento' : 'Informe o nome do evento'}:</label>
+                                <input name='nome' placeholder='Nome do evento' type='text' defaultValue={nome ?? ''}
+                                onChange={(e)=> setNome(e.target.value)}></input>
+                            </S.InputSpan>
 
-                    <label htmlFor='detalhes'>{editarEvento ? 'Editar detalhes doe vento' : 'Informe os detalhes do evento'}</label>
-                    <input name='detalhes' placeholder='Detalhes do evento' type='text' defaultValue={detalhes ?? ''}
-                    onChange={(e)=> setDetalhes(e.target.value)}></input>
+                            <S.InputSpan>
+                                <label htmlFor='detalhes'>{editarEvento ? 'Editar detalhes do evento' : 'Informe os detalhes do evento'}</label>
+                                <input name='detalhes' placeholder='Detalhes do evento' type='text' defaultValue={detalhes ?? ''}
+                                onChange={(e)=> setDetalhes(e.target.value)}></input>
+                            </S.InputSpan>
 
-                    <label htmlFor='data'>{editarEvento ? 'Editar data do evento' : 'Informe a data do evento'}</label>
-                    <input name='data' type="date" defaultValue={data ? new Date(data).toISOString().split("T")[0] : ''}
-                    onChange={(e)=>adicionarData(e.target.value)}></input>
+                            <S.InputSpan>
+                                <label htmlFor='data'>{editarEvento ? 'Editar data do evento' : 'Informe a data do evento'}</label>
+                                <input name='data' type="date" defaultValue={data ? new Date(data).toISOString().split("T")[0] : ''}
+                                onChange={(e)=>adicionarData(e.target.value)}></input>
+                            </S.InputSpan>
+                        </>)}
 
-                    <span className='localDoEvento flex flex-col'>
-                        <label htmlFor='nomeLocal'>Qual o nome do local em que vai acontecer o evento? <i>Exemplo: Nome da praça, nome do espaço de eventos...</i></label>
-                        <input type="text" name='nomeLocal' placeholder='Nome do local'
-                        value={localidade.nomeLocal}
-                        onChange={(e)=> setLocalidade(prev =>{ return {...prev, nomeLocal: e.target.value}})}></input>
+                        {tela == 2 && (<>
+                            <span className='localDoEvento flex flex-col gap-4'>
+                                <S.InputSpan>
+                                    <label htmlFor='nomeLocal'>Qual o nome do local em que vai acontecer o evento?<br></br><p className='opacity-50 italic'>Exemplo: Nome da praça, nome do espaço de eventos...</p></label>
+                                    <input type="text" name='nomeLocal' placeholder='Nome do local'
+                                    value={localidade.nomeLocal}
+                                    onChange={(e)=> setLocalidade(prev =>{ return {...prev, nomeLocal: e.target.value}})}></input>
+                                </S.InputSpan>
 
-                        <label htmlFor='bairro'>Bairro</label>
-                        <input type='text' name='bairro' placeholder='bairro'
-                        value={localidade.bairro}
-                        onChange={(e)=> setLocalidade(prev =>{ return {...prev, bairro: e.target.value}})}></input>
+                                <S.InputSpan>
+                                    <label htmlFor='bairro'>Bairro:</label>
+                                    <input type='text' name='bairro' placeholder='bairro'
+                                    value={localidade.bairro}
+                                    onChange={(e)=> setLocalidade(prev =>{ return {...prev, bairro: e.target.value}})}></input>
+                                </S.InputSpan>
 
-                        <label htmlFor='rua'>Rua</label>
-                        <input type='text' name='rua' placeholder='Rua'
-                        value={localidade.rua}
-                        onChange={(e)=> setLocalidade(prev =>{ return {...prev, rua: e.target.value}})}></input>
+                                <S.InputSpan>
+                                    <label htmlFor='rua'>Rua:</label>
+                                    <input type='text' name='rua' placeholder='Rua'
+                                    value={localidade.rua}
+                                    onChange={(e)=> setLocalidade(prev =>{ return {...prev, rua: e.target.value}})}></input>
+                                </S.InputSpan>
 
-                        <label htmlFor='link'>Link da localização do local</label>
-                        <input type='text' name='link' placeholder='Link da localização'
-                        defaultValue={localidade.link}
-                        onChange={(e)=> setLocalidade(prev =>{ return {...prev, link: e.target.value}})}></input>
-                    </span>
+                                <S.InputSpan>
+                                    <label htmlFor='link'>Link da localização do local:</label>
+                                    <input type='text' name='link' placeholder='Link da localização'
+                                    defaultValue={localidade.link}
+                                    onChange={(e)=> setLocalidade(prev =>{ return {...prev, link: e.target.value}})}></input>
+                                </S.InputSpan>
 
-                    <span className='linksDoEvento flex flex-col'>
-                        <span className="flex flex-col items-center">
-                            {!linksEvento ? (
-                                <p>Adicione também os links relacionados ao evento, por exemplo link para formulário de confirmação de presença, um website sobre o evento, post sobre evento nas redes sociais, etc... <i className="text-gray-700">{'(Opcional)'}</i></p>
-                            ) : (<p>Lista de links</p>)}
-                            {linksEvento?.map(link =>(
-                                <span key={link._id}
-                                className="flex flex-row">
-                                    <p>{link.nome}</p>
-                                    <button type='button' onClick={()=> editarLink(link)}>Editar</button>
-                                    <button type='button' onClick={()=> deletarLink(link)}>Deletar</button>
+                            </span>
+
+                            <span className='linksDoEvento flex flex-col gap-4'>
+                                <span className="flex flex-col items-center overflow-y-scroll">
+                                    <p>Adicione também os links relacionados ao evento, por exemplo link para formulário de confirmação de presença, um website sobre o evento, post sobre evento nas redes sociais, etc... <i className="text-gray-700">{'(Opcional)'}</i></p>
+                                    {linksEvento.map(link =>(<>
+                                            <NewLinkDoEvento key={link._id} linkEvento={link} setLinksEvento={setLinksEvento}/>
+                                                    </>))}
+                                    {linksEvento.length < 5 ? (
+                                        <S.Button_Secundario className='mt-2' type="button" onClick={()=>adicionarMaisLinks()}>{linksEvento ? 'Adicionar mais links' : 'Adicionar links'}</S.Button_Secundario>
+                                    ): (<p>{'Atingiu a quantidade máxima de links (4)'}</p>)}
                                 </span>
-                            ))}
-                            {editarCriarLink ? (
-                                <NewLinkDoEvento salvarLink={salvarLink} linkEvento={editarCriarLink}
-                                cancelar={cancelarEditarCriarLink}/>
-                            ):(
-                                <button type="button" onClick={adicionarMaisLinks}>{linksEvento ? 'Adicionar mais links' : 'Adicionar links'}</button>
-                            )}
+                            </span>
+                        </>)}
+                        <span className='w-full flex flwx-row justify-center gap-x-2'>
+                            <S.MultiplastTelasIndicador $tela={tela == 1 ? "on" : "off"}/>
+                            <S.MultiplastTelasIndicador $tela={tela == 2 ? "on" : 'off'}/>
                         </span>
-                    </span>
-                    <button type="submit">Salvar evento</button>
-                </form>
+                        {tela == 1 && (
+                            <S.Button_Secundario type='button' onClick={()=>setTela(2)}>Próximo</S.Button_Secundario>
+                        )}
+                        {tela == 2 && (<>
+                            <S.Button_Secundario type='button' onClick={()=>setTela(1)}>Voltar</S.Button_Secundario>
+                            <S.Button_Principal type="submit">Salvar evento</S.Button_Principal>
+                        </>
+                        )}
+
+                    </form>
+
+                </S.ModalContent>
             </S.ModalContainer>
         </S.ModalHolder>
 )

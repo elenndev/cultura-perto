@@ -1,7 +1,4 @@
 'use client'
-import { darkTheme, GlobalStyles, lightTheme } from '@/styles/themeConfig';
-import { ThemeProvider} from 'styled-components';
-import { useThemeContext } from '@/context/ContextTheme';
 import { useState } from 'react';
 import { useHomepage } from '@/@hooks/useHomepage';
 import { TypePerfilArtistico } from '@/types';
@@ -13,12 +10,10 @@ import Header from '../Header';
 
 export const Homepage = ({username} : {username: string | null} )=>{
     const {buscarArtistas} = useHomepage()
-    const { theme } = useThemeContext();
     const [janelaFiltros, setJanelaFiltros] = useState(true)
     const [loading, setLoading] = useState(false)
     const [perfis, setPerfis] = useState<null | TypePerfilArtistico[]>(null)
 
-    const currentTheme = theme === 'light' ? lightTheme : darkTheme;
     async function handleBuscar(filtro: {localidade: {cidade: string, estado: string}, arte: string[]}){
         const {localidade, ...checarAreaArtistica} = filtro
         const arte = checarAreaArtistica.arte.length > 0 ?checarAreaArtistica.arte : ['todas']
@@ -43,23 +38,20 @@ export const Homepage = ({username} : {username: string | null} )=>{
     }
 
     return(
-        <ThemeProvider theme={currentTheme}>
-                <GlobalStyles/>
-                <main className='w-screen h-screen relative flex flex-col items-center justify-center'>
-                    <ToastContainer/>
-                    {loading ? (<p>Carregando</p>) : (
+        <main className='w-screen h-screen relative flex flex-col items-center justify-center'>
+            <ToastContainer/>
+            {loading ? (<p>Carregando</p>) : (
+                <div>
+                    <Header username={username}/>
+                    {janelaFiltros && (<FiltrarBusca buscar={handleBuscar}/>)}
+                    {perfis && perfis.length > 0 &&(<ListaArtistas artistas={perfis}/>)}
+                    {perfis?.length == 0 && (
                         <div>
-                            <Header username={username}/>
-                            {janelaFiltros && (<FiltrarBusca buscar={handleBuscar}/>)}
-                            {perfis && perfis.length > 0 &&(<ListaArtistas artistas={perfis}/>)}
-                            {perfis?.length == 0 && (
-                                <div>
-                                    <p>Nenhum perfil encontrado</p>
-                                    <button type='button' onClick={()=> limparPesquisa()}>Pesquisar novamente</button>
-                                </div>)}
-                        </div>
-                    )}
-                </main>
-            </ThemeProvider>
+                            <p>Nenhum perfil encontrado</p>
+                            <button type='button' onClick={()=> limparPesquisa()}>Pesquisar novamente</button>
+                        </div>)}
+                </div>
+            )}
+        </main>
     )
 }

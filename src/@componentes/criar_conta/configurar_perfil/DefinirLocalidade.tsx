@@ -28,26 +28,31 @@ export default function DefinirLocalidade(props: definirLocalidadeprops) {
 
 
     return (
-        <div>
-        <label>Estado:</label>
-        <select value={estadoSelecionado} onChange={(e) => handleInformarLocalidade('estado',e.target.value)}>
-            <option value="">Selecione um estado</option>
-            {estados.map((estado) => (
-            <option key={estado.id} value={estado.sigla}>
-                {estado.nome}
-            </option>
-            ))}
-        </select>
+        <div className='flex flex-col items-center gap-y-2 md:flex-row'>
+            <p>Localidade</p>
+            <span>
+                <label>Estado:</label>
+                <select value={estadoSelecionado} onChange={(e) => handleInformarLocalidade('estado',e.target.value)}>
+                    <option value="">Selecione um estado</option>
+                    {estados.map((estado) => (
+                    <option key={estado.id} value={estado.sigla}>
+                        {estado.nome}
+                    </option>
+                    ))}
+                </select>
+            </span>
 
-        <label>Cidade:</label>
-        <select value={cidadeSelecionada} onChange={(e) => handleInformarLocalidade('cidade',e.target.value)} disabled={!estadoSelecionado}>
-            <option value="">Selecione uma cidade</option>
-            {cidades.map((cidade) => (
-            <option key={cidade.id} value={cidade.nome}>
-                {cidade.nome}
-            </option>
-            ))}
-        </select>
+        <span>
+            <label>Cidade:</label>
+            <select value={cidadeSelecionada} onChange={(e) => handleInformarLocalidade('cidade',e.target.value)} disabled={!estadoSelecionado}>
+                <option value="">Selecione uma cidade</option>
+                {cidades.map((cidade) => (
+                <option key={cidade.id} value={cidade.nome}>
+                    {cidade.nome}
+                </option>
+                ))}
+            </select>
+        </span>
         </div>
     );
 }
