@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 
 interface etapaDetahesProps {
     nome: string;
-    area: 'musica'| 'cenica' | 'artesanato';
+    area: 'musica'| 'cenica' | 'artesanato/artes visuais';
     descricao: string | null;
     setDescricao: (descricao: string) => void;
     handleFinalizarConfiguracaoPerfil: (links: TypeLinksPerfil[]) => void;
@@ -47,7 +47,7 @@ export default function Etapa_Detalhes(props: etapaDetahesProps){
         </span>
         <span>
             <p>Adicione o link das suas redes sociais!</p>
-            {props.area !== 'artesanato' && (
+            {props.area !== 'artesanato/artes visuais' && (
                 <span className="spotify">
                     <label htmlFor="spotify">Spotify</label>
                     <input name="spotify" type="url" placeholder="Adicionar link do seu perfil do spotify"

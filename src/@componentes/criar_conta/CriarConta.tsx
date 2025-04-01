@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react";
 import axios from "axios";
+import { InputSpan } from "@/styles/Styles";
 
 
 const url = process.env.NEXT_PUBLIC_APP_URL
@@ -48,13 +49,13 @@ export default function CriarConta(props : criarContaProps) {
         };
 
         return(
-            <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-lg">
+            <div className="flex justify-center items-center min-h-screen">
+        <div className="w-full max-w-sm p-6 bg-white border border-[#ffb162] rounded-lg shadow-lg">
             <h1 className="text-2xl font-bold text-center mb-6">Criar uma nova conta</h1>
             
             <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label htmlFor="username" className="block text-sm font-semibold text-gray-700">
+                <InputSpan className="mb-4 flex-col">
+                    <label htmlFor="username" className="block text-sm font-semibold">
                         Nome de usuario
                     </label>
                     <input
@@ -63,9 +64,9 @@ export default function CriarConta(props : criarContaProps) {
                         name="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-md"
+                        className="w-full p-3"
                         required/>
-                </div>
+                </InputSpan>
 
                 <div className="mb-4">
                     <label htmlFor="email" className="block text-sm font-semibold text-gray-700">

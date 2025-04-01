@@ -1,4 +1,5 @@
 import { Homepage } from '@/@componentes/homepage/Homepage';
+import Loader from '@/@componentes/Loader';
 import {getSessionData} from '@/utils/auth'
 import { Suspense } from 'react';
 
@@ -7,7 +8,10 @@ const Page = async () => {
     const user  = session as {username: string} | null
 
     return (
-        <Suspense fallback={<p>Carregando</p>}>
+        <Suspense fallback={<div className='suspense'>
+            <Loader size={'7rem'}/>
+            <p>Carregando</p>
+        </div>}>
             <Homepage username = {user?.username ?? null}/>
         </Suspense>
     );

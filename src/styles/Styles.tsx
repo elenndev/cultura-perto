@@ -1,7 +1,10 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 export const H2 = styled.p`
     font-size: 1.5rem;
+`
+export const H1 = styled.p`
+    font-size: 2.25rem;
 `
 
 export const Button = styled.button`
@@ -55,8 +58,11 @@ export const ModalContainer = styled.div`
         width: 100%;
         background: #2c3b4d;
         color: white;
-        justify-content: left;
-        padding: 0 2rem;
+        overflow: hidden;
+        border-top-right-radius: 2rem;
+        border-top-left-radius: 2rem;
+        justify-content: center;
+        padding: 0.85rem 0;
         display: flex;
         font-weight: bold;
         height: fit-content;
@@ -103,6 +109,7 @@ export const InputSpan = styled.span`
         display: flex;
         flex-direction: column;
         overflow: wrap;
+        gap: 0.75rem 0;
         border-radius: 0.5rem;
         label{
             margin-right: 5px;
@@ -117,7 +124,6 @@ export const InputSpan = styled.span`
 interface MultiplasTelasIndicadorProps {
     $tela?: string;
 }
-
 export const MultiplastTelasIndicador = styled.span<MultiplasTelasIndicadorProps>`
     --tamanho: 1rem;
     content: 'none';
@@ -138,3 +144,34 @@ export const SelecionarOpcoes = styled.div`
         border: solid 2px #0a2538;
     }
 `
+
+export const rotate = keyframes`
+    100% {
+        transform: rotate(360deg);
+    }
+`
+
+export const dash = keyframes`
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+`
+
+export const LoaderSVG = styled.svg`
+    animation: ${rotate} 2s linear infinite;
+
+    circle {
+    animation: ${dash} 1.5s ease-in-out infinite;
+    }
+`
+
+

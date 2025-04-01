@@ -9,7 +9,6 @@ export async function GET(request: NextRequest){
         const estado = searchParams.get('estado')
         const nome = searchParams.get('nome')
         const obterAreaArtistica = searchParams.getAll('arte[]')
-
         await connectMongoDB()
 
         if(!cidade && !estado && !nome && !obterAreaArtistica){
@@ -22,7 +21,7 @@ export async function GET(request: NextRequest){
             const perfis = await PerfilArtisticoDB.find({
                 "localidade.cidade": cidade,
                 "localidade.estado": estado,
-                area: { $in: obterAreaArtistica.includes("todas") ? ["musica", "cenica", "artesanato"] : obterAreaArtistica }
+                area: { $in: obterAreaArtistica.includes("todas") ? ["musica", "cenica", "artesanato/artes visuais"] : obterAreaArtistica }
             });
             
             return NextResponse.json({perfis},{status: 200})

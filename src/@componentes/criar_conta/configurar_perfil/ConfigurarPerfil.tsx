@@ -4,6 +4,9 @@ import React, { useState } from "react"
 import DefinirLocalidade from "./DefinirLocalidade";
 import Etapa_Detalhes from "./Etapa_Detalhes";
 import Etapa_TipoENome from "./Etapa_TipoENome";
+import { FaTheaterMasks } from "react-icons/fa";
+import { GiMusicalNotes } from "react-icons/gi";
+import { IoIosColorPalette } from "react-icons/io";
 
 interface configurarPerfilProps {
     registrarPerfil: (perfil: TypePerfilArtistico) => void;
@@ -19,11 +22,11 @@ export default function ConfigurarPerfil(props : configurarPerfilProps){
     const [cidadeSelecionada, setCidadeSelecionada] = useState<string>("");
 
     const [nome, setNome] = useState<string | null>(null)
-    const [area, setArea] = useState<null  |'musica'| 'cenica' |'artesanato'>(null)
+    const [area, setArea] = useState<null  |'musica'| 'cenica' |'artesanato/artes visuais'>(null)
     const [tipo, setTipo] = useState<null | 'grupo' | 'individual'>(null)
     const [descricao, setDescricao] = useState<string | null>(null)
 
-    function handleSelecionarAreaArtistica(opcao: 'musica'| 'cenica' | 'artesanato'){
+    function handleSelecionarAreaArtistica(opcao: 'musica'| 'cenica' | 'artesanato/artes visuais'){
         setArea(opcao)
         if(cidadeSelecionada && estadoSelecionado){
             permitirProximaEtapa()
@@ -90,9 +93,18 @@ export default function ConfigurarPerfil(props : configurarPerfilProps){
             estadoSelecionado={estadoSelecionado}
             handleInformarLocalidade={handleInformarLocalidade}/>
             <ul>
-                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('musica')}>Música</button></li>
-                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('artesanato')}>Artesanato</button></li>
-                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('cenica')}>Cênica</button></li>
+                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('musica')}>
+                    Música
+                    <GiMusicalNotes />
+                </button></li>
+                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('artesanato/artes visuais')}>
+                    Artesanato/Artes Visuais
+                    <IoIosColorPalette />
+                </button></li>
+                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('cenica')}>
+                    Cênica
+                    <FaTheaterMasks />
+                </button></li>
             </ul>
         </>)}
 

@@ -6,6 +6,8 @@ import ListaArtistas from './ListaArtistas';
 import { FiltrarBusca } from './FiltrarBusca';
 import { toast, ToastContainer } from 'react-toastify';
 import Header from '../Header';
+import { Button_Principal } from '@/styles/Styles';
+import Loader from '../Loader';
 
 
 export const Homepage = ({username} : {username: string | null} )=>{
@@ -38,17 +40,21 @@ export const Homepage = ({username} : {username: string | null} )=>{
     }
 
     return(
-        <main className='w-screen h-screen relative flex flex-col items-center justify-center'>
+        <main className='w-screen h-screen max-w-screen relative flex flex-col items-center mt-0'>
             <ToastContainer/>
-            {loading ? (<p>Carregando</p>) : (
+            {loading ? (
+                <div className = 'h-full flex flex-col justify-center'>
+                    <p>Carregando</p>
+                    <Loader size={'7rem'}/>
+                </div>) : (
                 <div>
                     <Header username={username}/>
                     {janelaFiltros && (<FiltrarBusca buscar={handleBuscar}/>)}
                     {perfis && perfis.length > 0 &&(<ListaArtistas artistas={perfis}/>)}
                     {perfis?.length == 0 && (
-                        <div>
+                        <div className='h-full gap-y-2 mt-[5rem] flex flex-col justify-center items-center'>
                             <p>Nenhum perfil encontrado</p>
-                            <button type='button' onClick={()=> limparPesquisa()}>Pesquisar novamente</button>
+                            <Button_Principal type='button' onClick={()=> limparPesquisa()}>Fazer outra pesquisa</Button_Principal>
                         </div>)}
                 </div>
             )}

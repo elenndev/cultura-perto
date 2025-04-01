@@ -70,9 +70,8 @@ export default function CriarEditarEvento(props : criarEventoProps){
     return(
         <S.ModalHolder>
             <S.ModalContainer className='w-[80vw]'>
-                <S.ModalHeader className='relative py-3'>
-                    {editarEvento ? `Editando evento: ${editarEvento.nome}` : 'Criando novo evento'}
-                    <button className='absolute right-2.5' type="button" onClick={()=>cancelar()}>Cancelar</button>
+                <S.ModalHeader>
+                    <p>{editarEvento ? `Editando evento: ${editarEvento.nome}` : 'Criando novo evento'}</p>
                 </S.ModalHeader>
                 <S.ModalContent className='w-[90%]'>
                     <form onSubmit={(e)=> handleSalvarEvento(e)} className='flex flex-col gap-4 justify-center px-4 py-3'>
@@ -152,7 +151,7 @@ export default function CriarEditarEvento(props : criarEventoProps){
                             <S.Button_Principal type="submit">Salvar evento</S.Button_Principal>
                         </>
                         )}
-
+                        <S.Button_Danger type="button" onClick={()=>cancelar()}>Cancelar</S.Button_Danger>
                     </form>
 
                 </S.ModalContent>

@@ -178,7 +178,7 @@ export function Perfil(props : perfilProps){
             <Header username={props.isLogged ? props.isLogged.username : null}/>
         {editarPerfil && (
             <S.ModalHolder>
-                <S.ModalContainer className='w-[80vw]'>
+                <S.ModalContainer className='w-[85vw] md:w-[70vw]'>
                     <EditarPerfil perfilArtistico={perfil} fecharJanela={fecharEditarPerfil} atualizarPerfil={atualizarPerfil}/>
                 </S.ModalContainer>
             </S.ModalHolder>
@@ -205,7 +205,7 @@ export function Perfil(props : perfilProps){
                         <h1 className="text-5xl">{perfil.nome}</h1>
                         <p className="italic">@{perfil.username}</p>
                         <p className="px-4 rounded-2xl w-fit bg-[#ffb162] text-[#0a2538]">{perfil.localidade.cidade} - {perfil.localidade.estado}</p>
-                        <p className="px-4 rounded-2xl w-fit bg-[#ffb162] text-[#0a2538]">{perfil.area == 'musica' ? 'Música' : perfil.area == "artesanato" ? 'Arte artesanal' : 'Arte cênica'}</p>
+                        <p className="px-4 rounded-2xl w-fit bg-[#ffb162] text-[#0a2538]">{perfil.area == 'musica' ? 'Música' : perfil.area == "artesanato/artes visuais" ? 'Arte artesanal' : 'Arte cênica'}</p>
                         {perfil.linksDoPerfil?.map(link =>(
                             <span className="bg-[#A35139] text-white px-4 rounded-2xl flex flex-row items-center gap-x-2 w-fit cursor-pointer" key={nanoid()}>
                                 <IconContext.Provider value={{size: "1rem" }}>

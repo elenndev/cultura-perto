@@ -7,7 +7,7 @@ export type TypePerfilArtistico = {
     username: string;
     descricao: string;
     tipo: 'grupo' | 'individual';
-    area: 'musica' | 'cenica' | 'artesanato';
+    area: 'musica' | 'cenica' | 'artesanato/artes visuais';
     linksDoPerfil: TypeLinksPerfil[];
     localidade: TypeLocalidadePerfil;
     agenda: null | TypeEvento[]

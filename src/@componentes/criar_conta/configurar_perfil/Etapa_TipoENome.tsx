@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 interface etapaProps {
-    area: 'musica' | 'cenica' | 'artesanato'
+    area: 'musica' | 'cenica' | 'artesanato/artes visuais'
     responder: (opcao: 'grupo' | 'individual' | string) => void;
     permitirProximaEtapa: () => void;
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Cidade, Estado } from "@/types";
+import * as S from '@/styles/Styles';
 
 interface definirLocalidadeprops {
     estadoSelecionado: string;
@@ -29,30 +30,29 @@ export default function DefinirLocalidade(props: definirLocalidadeprops) {
 
     return (
         <div className='flex flex-col items-center gap-y-2 md:flex-row'>
-            <p>Localidade</p>
-            <span>
+            <S.InputSpan className='flex flex-col'>
                 <label>Estado:</label>
                 <select value={estadoSelecionado} onChange={(e) => handleInformarLocalidade('estado',e.target.value)}>
-                    <option value="">Selecione um estado</option>
+                    <option className='bg-white text-black' value="">Selecione um estado</option>
                     {estados.map((estado) => (
-                    <option key={estado.id} value={estado.sigla}>
+                    <option className='bg-white text-black' key={estado.id} value={estado.sigla}>
                         {estado.nome}
                     </option>
                     ))}
                 </select>
-            </span>
+            </S.InputSpan>
 
-        <span>
+        <S.InputSpan className='flex flex-col'>
             <label>Cidade:</label>
             <select value={cidadeSelecionada} onChange={(e) => handleInformarLocalidade('cidade',e.target.value)} disabled={!estadoSelecionado}>
-                <option value="">Selecione uma cidade</option>
+                <option className='bg-white text-black' value="">Selecione uma cidade</option>
                 {cidades.map((cidade) => (
-                <option key={cidade.id} value={cidade.nome}>
+                <option className='bg-white text-black' key={cidade.id} value={cidade.nome}>
                     {cidade.nome}
                 </option>
                 ))}
             </select>
-        </span>
+        </S.InputSpan>
         </div>
     );
 }
