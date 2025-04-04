@@ -198,7 +198,7 @@ export function Perfil(props : perfilProps){
                             <Button_LogOut />
                             <button className='text-[#ee9df]' type='button' onClick={()=> {setMenu(false);setMenu(false)}}>Fechar</button>
                         </div>) : 
-                        (<S.Button_Principal className='absolute shadow-md z-30 right-0' type='button' onClick={()=>setMenu(true)}>Menu</S.Button_Principal>)
+                        (<S.Button_Principal className='absolute shadow-md z-30 right-7 top-1' type='button' onClick={()=>setMenu(true)}>Menu</S.Button_Principal>)
                         }
                     </>)}
                     <span className='flex flex-col items-center w-full z-10 gap-y-2 mt-3'>

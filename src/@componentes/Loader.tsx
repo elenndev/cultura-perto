@@ -1,6 +1,4 @@
-// import { LoaderSVG } from "@/styles/Styles";
-
-export default function Loader({size}: {size: string}){
+export default function Loader({size, color}: {size: string, color?: string}){
     return (
         <svg
         width={size}
@@ -8,7 +6,7 @@ export default function Loader({size}: {size: string}){
         className='loader'
         viewBox="0 0 24 24"
         fill="none"
-        stroke="currentColor"
+        stroke={color ?? "currentColor"}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

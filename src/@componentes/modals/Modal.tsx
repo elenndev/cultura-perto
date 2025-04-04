@@ -7,7 +7,6 @@ type modalProps = {
         title?: string;
         content: string;
         details?: string;
-        isLoadingModal?: boolean;
     }
     children?: React.ReactNode;
     extendContent?: React.ReactNode;
@@ -34,7 +33,6 @@ export default function Modal({modalContent, children, extendContent}: modalProp
                     </>)}
                     <S.ModalContent>{children}</S.ModalContent>
                     {extendContent}
-                    {modalContent.isLoadingModal && (<p>{"Carregando....'[trocar esse texto por animação]'"}</p>)}
                 </S.ModalBody>
             </S.ModalContainer>
         </S.ModalHolder>

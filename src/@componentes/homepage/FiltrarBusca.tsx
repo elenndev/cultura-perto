@@ -55,7 +55,7 @@ export const FiltrarBusca = ({buscar} : filtrarBuscaProps)=>{
                 <span className='flex flex-col w-fit'>
                     <S.H2>Que tipo de arte você procura?</S.H2>
                     <p><i>Você pode <span className="border-2 border-[#ffb162] border-solid rounded-2xl p-1">selecionar</span> um ou mais de um tipo ou não marcar nenhum para buscar por todos os tipos de arte</i></p>
-                    <div className="flex w-full mt-3 px-3 gap-x-3 flex-wrap justify-center">
+                    <div className="flex w-full mt-3 px-3 gap-3 flex-wrap justify-center">
                         {opcoes.map((opcao) => (
                         <S.Button
                             key={opcao}

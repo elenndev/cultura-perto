@@ -24,6 +24,11 @@ export const Button_OK = styled(Button)`
 export const Button_Principal = styled(Button)`
     background: #ffb162;
     color: #1b2632;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+    &:hover{
+        background: #a35139;
+        color: white;
+    }
 `
 export const Button_Secundario = styled(Button)`
     background: #c9c1b1;

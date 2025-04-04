@@ -1,133 +1,74 @@
 'use client'
+import { useConta } from "@/@hooks/useConta";
+import { TypePerfilArtistico } from "@/types";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
-import axios from "axios";
-import { InputSpan } from "@/styles/Styles";
+import { toast, ToastContainer } from "react-toastify";
+import Header from "../Header";
+import Modal_Loading from "../modals/Modal_Loading";
+import CriarUser from "./CriarUser";
+import ConfigurarPerfil from "./configurar_perfil/ConfigurarPerfil";
 
+export default function CriarConta(){
+    const { registrarNovoUsuario } = useConta()
+    const [modalLoadingAberto, setModalLoadingAberto] = useState<false | {content: string}>(false)
+    const [novoUsuario, setNovoUsuario] = useState<null | {username: string, email: string, password: string}>(null)
+    const [configurarDetalhes, setConfigurarDetalhes] = useState(false)
+    
+    function irParaOsDetalhes(usuario: {username: string, email: string, password: string}){
+        setNovoUsuario(usuario)
+        setConfigurarDetalhes(true)
+    }
 
-const url = process.env.NEXT_PUBLIC_APP_URL
+    async function finalizarCriarConta(perfil: TypePerfilArtistico){
+        if(novoUsuario && perfil){
+            try{
+                const novaConta = await registrarNovoUsuario(novoUsuario.email, novoUsuario.username, novoUsuario.password, perfil)
+                if(novaConta){
+                    const login = await signIn("credentials", {
+                        redirect: true,
+                        callbackUrl: `/perfil/${novoUsuario.username}`,
+                        credential: novoUsuario.email,
+                        password: novoUsuario.password,
+                    })
+                    if(login?.error){
+                        setNovoUsuario(null)
+                        setConfigurarDetalhes(false)
+                        setModalLoadingAberto(false)
+                        toast.error('Erro ao tentar criar a conta, se o erro persistir por favor entre em contato com o suporte')
+                    }
+                }
 
-interface criarContaProps {
-    irParaOsDetalhes: (usuario: {username: string, email: string, password: string}) => void;
-}
-export default function CriarConta(props : criarContaProps) {
-    const [email, setEmail] = useState("")
-    const [confirmarSenha, setConfirmarSenha] = useState("")
-    const [username, setUsername] = useState("")
-
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false)
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true)
-        setError(""); 
-
-        try{
-            const reqChecarUsernameEmail = await axios.get(`${url}/api/user`, { params: { email, username } });
-
-            if(reqChecarUsernameEmail.data.user && ['email indisponivel','username indisponivel','email e nome de usuario indisponivel'].includes(reqChecarUsernameEmail.data.user)){
-                setLoading(false)
-                return setError(reqChecarUsernameEmail.data.user as string)
+            }catch(error){
+                toast.error(`Erro ao tentar criar a conta:${error} | Se o erro persistir por favor entre em contato com o suporte`,)
+                setNovoUsuario(null)
+                setConfigurarDetalhes(false)
+                setModalLoadingAberto(false)
             }
-        }catch(error){
-            console.log(error)
-            setLoading(false)
-            return setError("Erro na requisição para criar o usuário, se o erro persistir por favor entre em contato com o suporte")
+            
         }
 
-        if(password != confirmarSenha){
-        return setError("Senhas diferentes, por favor verifique novamente")
-        }
-        props.irParaOsDetalhes({
-            email,
-            username,
-            password,
-        })
+    }
 
+    function registrarPerfil(perfil: TypePerfilArtistico){
+        setModalLoadingAberto({content: "Criando conta"})
+        finalizarCriarConta(perfil)
+    }
 
-        };
-
-        return(
-            <div className="flex justify-center items-center min-h-screen">
-        <div className="w-full max-w-sm p-6 bg-white border border-[#ffb162] rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold text-center mb-6">Criar uma nova conta</h1>
-            
-            <form onSubmit={handleSubmit}>
-                <InputSpan className="mb-4 flex-col">
-                    <label htmlFor="username" className="block text-sm font-semibold">
-                        Nome de usuario
-                    </label>
-                    <input
-                        type="username"
-                        id="username"
-                        name="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="w-full p-3"
-                        required/>
-                </InputSpan>
-
-                <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
-                    Email
-                    </label>
-                    <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md"
-                    required
-                    />
-                </div>
-            
-            <div className="mb-4">
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
-                Senha
-                </label>
-                <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-                />
-            </div>
-            <div className="mb-4">
-                <label htmlFor="confirmarSenha" className="block text-sm font-semibold text-gray-700">
-                Confirmar senha
-                </label>
-                <input
-                type="password"
-                id="confirmarSenha"
-                name="confirmarSenha"
-                value={confirmarSenha}
-                onChange={(e) => setConfirmarSenha(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md"
-                required
-                />
-            </div>
-
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-
-            <div className="mb-4">
-                <button
-                disabled={loading}
-                type="submit"
-                className={`w-full py-3 px-4 bg-blue-500  text-white ${loading ? 'opacity-50 bg-blue-800' : 'hover:bg-blue-600'} font-semibold rounded-md `}
-                >Criar Conta</button>
-            </div>
-            </form>
-
-            <div className="text-center mt-4">
-            <a href="/login"
-            className="text-blue-500 font-semibold">Já tem uma conta? Faça login</a>
-            </div>
-        </div>
-        </div>
-    )
+    return(<>
+        <main className="h-full w-full flex flex-col items-center relative">
+            {modalLoadingAberto && (
+                <div className='absolute z-20 w-full h-full'>
+                <Modal_Loading content={modalLoadingAberto.content}/></div>)}
+            <ToastContainer/>
+            <Header username={null}/>
+            {!configurarDetalhes && (<>
+                <CriarUser irParaOsDetalhes={irParaOsDetalhes}/>
+            </>)}
+            {configurarDetalhes && novoUsuario && (<>
+                <ConfigurarPerfil registrarPerfil={registrarPerfil} username={novoUsuario.username}/>
+            </>
+                )}
+        </main>
+        </>)
 }

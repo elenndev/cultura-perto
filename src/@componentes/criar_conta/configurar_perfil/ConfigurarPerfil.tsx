@@ -7,6 +7,7 @@ import Etapa_TipoENome from "./Etapa_TipoENome";
 import { FaTheaterMasks } from "react-icons/fa";
 import { GiMusicalNotes } from "react-icons/gi";
 import { IoIosColorPalette } from "react-icons/io";
+import * as S from '@/styles/StyledLogin'
 
 interface configurarPerfilProps {
     registrarPerfil: (perfil: TypePerfilArtistico) => void;
@@ -85,27 +86,39 @@ export default function ConfigurarPerfil(props : configurarPerfilProps){
 
 
     return(<>
-        <div className="flex flex-col relative h-full w-full">
+        <div className="flex flex-col relative h-full w-[90%] items-center justify-center">
         {etapa == 1 && (<>
-            <h1>Vamos montar o seu perfil!</h1>
-            <p>Primeiro, informe sua cidade e qual área artística é aplicavel ao seu perfil?</p>
+            <S.H1 className="border-b-[#ffb162] border-t-0 border-r-0 border-l-0 border mb-2">Vamos montar o seu perfil!</S.H1>
+            <p>Primeiro, informe sua cidade e qual área artística é aplicavel ao seu perfil</p>
             <DefinirLocalidade cidadeSelecionada={cidadeSelecionada}
             estadoSelecionado={estadoSelecionado}
             handleInformarLocalidade={handleInformarLocalidade}/>
-            <ul>
-                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('musica')}>
-                    Música
-                    <GiMusicalNotes />
-                </button></li>
-                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('artesanato/artes visuais')}>
-                    Artesanato/Artes Visuais
-                    <IoIosColorPalette />
-                </button></li>
-                <li><button type="button" onClick={()=> handleSelecionarAreaArtistica('cenica')}>
-                    Cênica
-                    <FaTheaterMasks />
-                </button></li>
-            </ul>
+            <span className ='flex flex-col gap-2 mt-4 mb-2 items-center'>
+                <p className='border-t-[#ffb162] border-b-0 border-r-0 border-l-0 border py-1.5 px-4'>Área artística</p>
+                <ul className='flex flex-wrap gap-2.5'>
+                    <li><S.Button
+                    className={`flex flex-row items-center justify-center px-4 py-2 gap-x-1 border rounded-md ${
+                        area == 'musica' ? "bg-[#ffb162] border-[#a35139]" : "bg-[#eee9df] border-[transparent]"}`}
+                    type="button" onClick={()=> handleSelecionarAreaArtistica('musica')}>
+                        Música
+                        <GiMusicalNotes />
+                    </S.Button></li>
+                    <li><S.Button
+                    className={`flex flex-row items-center justify-center px-4 py-2 gap-x-1 border rounded-md ${
+                        area == 'artesanato/artes visuais' ? "bg-[#ffb162] border-[#a35139]" : "bg-[#eee9df] border-[transparent]"}`}
+                    type="button" onClick={()=> handleSelecionarAreaArtistica('artesanato/artes visuais')}>
+                        Artesanato/Artes Visuais
+                        <IoIosColorPalette />
+                    </S.Button></li>
+                    <li><S.Button
+                    className={`flex flex-row items-center justify-center px-4 py-2 gap-x-1 border rounded-md ${
+                        area == 'cenica' ? "bg-[#ffb162] border-[#a35139]" : "bg-[#eee9df] border-[transparent]"}`}
+                    type="button" onClick={()=> handleSelecionarAreaArtistica('cenica')}>
+                        Cênica
+                        <FaTheaterMasks />
+                    </S.Button></li>
+                </ul>
+            </span>
         </>)}
 
         {etapa == 2 && area &&(<Etapa_TipoENome area={area} responder={handleResposta} permitirProximaEtapa={permitirProximaEtapa}/>)}
@@ -113,10 +126,10 @@ export default function ConfigurarPerfil(props : configurarPerfilProps){
         {etapa == 3 && nome && area && (<Etapa_Detalhes area={area} descricao={descricao} setDescricao={setDescricao} handleFinalizarConfiguracaoPerfil={handleFinalizarConfiguracaoPerfil} nome={nome}/>)}
 
         {etapa <=2 && (
-            <button disabled={!permitirProxEtapa ? true : false}
+            <S.Button_Principal disabled={!permitirProxEtapa ? true : false}
             type='button'
             className={`${!permitirProxEtapa && 'opacity-45'}`}
-            onClick={handleProximaEtapa}>Próximo</button>
+            onClick={handleProximaEtapa}>Próximo</S.Button_Principal>
         )}
         </div>
     </>)
