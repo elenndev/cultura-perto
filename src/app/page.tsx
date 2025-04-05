@@ -5,14 +5,13 @@ import { Suspense } from 'react';
 
 const Page = async () => {
     const session = await getSessionData()
-    const user  = session as {username: string} | null
-
+    const user  = session as { user: {username: string} | null }| null
     return (
         <Suspense fallback={<div className='suspense'>
             <Loader size={'7rem'}/>
             <p>Carregando</p>
         </div>}>
-            <Homepage username = {user?.username ?? null}/>
+            <Homepage username = {user?.user?.username ?? null}/>
         </Suspense>
     );
 };

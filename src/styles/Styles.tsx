@@ -6,6 +6,31 @@ export const H2 = styled.p`
 export const H1 = styled.p`
     font-size: 2.25rem;
 `
+export const Menu = styled.span`
+    .link{
+        background: #1b2632;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+    }
+`
+
+export const ContainerHolder = styled.section`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3rem;
+    border: solid 2px #ffb162;
+    .container{
+        border-radius: 3rem;
+        background: #2c3b4d;
+        box-shadow: 0 0 10px -5px #00000076;
+    }
+    .logo{
+        box-shadow: 0 0 20px -3px #00000076;
+        border-radius: 50%;
+        object-fit: "contain"
+    }
+`
 
 export const Button = styled.button`
     width: fit-content;
@@ -77,11 +102,14 @@ export const ModalContainer = styled.div`
         display: flex;
         flex-direction: column;
         height: fit-content;
+        padding: 1rem;
         `;
         export const ModalContent = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: fit-content;
+        padding: 0 1.5rem;
     `;
 
 export const TBody = styled.tbody`

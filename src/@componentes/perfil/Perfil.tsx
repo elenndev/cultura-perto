@@ -183,7 +183,7 @@ export function Perfil(props : perfilProps){
                 </S.ModalContainer>
             </S.ModalHolder>
         )}
-        <main className="h-full w-screen flex flex-col items-center mt-0 relative gap-y-3">
+        <div className="h-full w-screen flex flex-col items-center mt-0 relative gap-y-3">
                 <div className="flex flex-col items-center gap-0.5 relative w-full">
                 <StyledPerfilHeader/>
                 <span className='z-20 shadow-xl rounded-[50%] p-2'>
@@ -223,7 +223,7 @@ export function Perfil(props : perfilProps){
                 <S.H2>Sobre</S.H2>
                 <p>{perfil.descricao}</p>
             </span>
-        </main>
+        </div>
     
         </div>
     </ContextAuthProvider>

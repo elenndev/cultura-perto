@@ -33,7 +33,7 @@ export default function Login() {
         }
 
         return(
-                <main className="h-full w-full flex flex-col items-center relative">
+                <div className="h-full w-full flex flex-col items-center relative">
                     <Header username={null}/>
                     <div className='mt-14 w-full max-w-sm p-3 shadow-xl rounded-3xl border border-[#ffb162]'>
                         <div className="w-full max-w-sm bg-[#222e3d] shadow-xl p-4 rounded-3xl">
@@ -90,6 +90,6 @@ export default function Login() {
                         </div>
 
                     </div>
-                </main>
+                </div>
         )
 }

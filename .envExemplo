@@ -1,0 +1,5 @@
+MONGODB_URI=mongodb-url
+APP_URL=url
+NEXT_PUBLIC_APP_URL=url
+EMAIL_USER=email
+EMAIL_PASS=senhaEmailPass
