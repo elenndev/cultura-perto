@@ -1,6 +1,6 @@
 # 🎨 Cultura Perto
 
-O **Cultura Perto** é uma plataforma web que conecta artistas locais com moradores de suas cidades. Artistas podem criar perfis com suas especialidades, redes sociais e localização, enquanto visitantes podem buscar por tipo de arte e cidade — nosso objetivo é **fortalecer a cultura local e incentivar a valorização dos artistas locais**.
+O **Cultura Perto** é uma plataforma web que conecta artistas locais com moradores de suas cidades. Artistas podem criar perfis com suas especialidades, redes sociais e localização, enquanto visitantes podem buscar pelos artistas em sua cidade — nosso objetivo é **fortalecer a cultura local e incentivar a valorização dos artistas locais**.
 
 ## 🚀 Funcionalidades
 
