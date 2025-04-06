@@ -22,8 +22,9 @@ export function useConta(){
             }else{
                 throw new Error()
             }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        
         }catch(error){
+            console.log(error)
             params.handleErro()}
 
     }
