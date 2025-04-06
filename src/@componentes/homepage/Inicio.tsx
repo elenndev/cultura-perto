@@ -21,7 +21,7 @@ export default function Inicio(props: inicioProps){
             <S.ContainerHolder className='w-[97%]'>
                 <div className='container p-4'>
                     <span className='flex flex-row items-center justify-around gap-4 relative'>
-                        <span className='relative w-[8rem] h-[8rem] md:w-[10rem] md:h-[10rem]'>
+                        <span className='relative w-[8rem] h-[8rem] md:w-[15rem] md:h-[15rem]'>
                             <Image
                                 src='/logo.webp'
                                 fill={true}

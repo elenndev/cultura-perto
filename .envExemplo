@@ -3,3 +3,4 @@ APP_URL=url
 NEXT_PUBLIC_APP_URL=url
 EMAIL_USER=email
 EMAIL_PASS=senhaEmailPass
+AUTH_SECRET=seuAuthSecret

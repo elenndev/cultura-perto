@@ -25,9 +25,9 @@ export const Homepage = ({username} : {username: string | null} )=>{
     }
     function cadastrarOuVerPerfil(){
         if (username){
-            return router.push('/login')
-        } else {
             return router.push(`/perfil/${username}`)
+        } else {
+            return router.push('/login')
         }
         
     }
