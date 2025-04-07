@@ -1,15 +1,10 @@
 'use client'
 import { Button_Secundario } from "@/styles/Styles";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
 
 export function Button_LogOut(){
-    const router = useRouter()
     async function out(){
-        await signOut()
-    
-        router.push("/")
+        await signOut({callbackUrl: '/'})
     }
     return(<Button_Secundario type='button' onClick={()=>out()}>Sair da conta</Button_Secundario>)
 }
