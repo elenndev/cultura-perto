@@ -69,8 +69,10 @@ export const Button_Adicional = styled(Button)`
 export const ModalHolder = styled.div`
     position: absolute;
     z-index: 999;
-    width: 100vw;
-    height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -82,6 +84,7 @@ export const ModalContainer = styled.div`
     color: black;
     display: flex;
     flex-direction: column;
+    align-items: center;
     border-radius: 2rem;
     `;
     export const ModalHeader = styled.div`
@@ -102,6 +105,7 @@ export const ModalContainer = styled.div`
         display: flex;
         flex-direction: column;
         height: fit-content;
+        align-items: center;
         padding: 1rem;
         `;
         export const ModalContent = styled.div`

@@ -30,7 +30,7 @@ export default function CriarEditarEvento(props : criarEventoProps){
 
     const [linksEvento, setLinksEvento] = useState<TypeLinkEvento[]>(
         editarEvento?.linksEvento && editarEvento?.linksEvento.length > 0 ? editarEvento.linksEvento
-        : [{nome: "", link: "", _id: nanoid()}])
+        : [{nome: "linkRelacionadoEvento", link: "", _id: nanoid()}])
 
 
     function adicionarData(dataString: string){
@@ -38,17 +38,6 @@ export default function CriarEditarEvento(props : criarEventoProps){
         setData(data)
     }
     
-    function adicionarMaisLinks(){
-        setLinksEvento(prev =>{
-            const novoLink = {nome: "", link: "", _id:nanoid()}
-            if(prev){
-                prev.push(novoLink)
-                return prev
-            } else {
-                return [novoLink]}
-        })
-    }
-
     function handleSalvarEvento(e: React.FormEvent){
         e.preventDefault()
         if(nome && detalhes && data  && Object.values(localidade).some(localInfo => localInfo.trim() != '')){
@@ -117,39 +106,39 @@ export default function CriarEditarEvento(props : criarEventoProps){
                                     value={localidade.rua}
                                     onChange={(e)=> setLocalidade(prev =>{ return {...prev, rua: e.target.value}})}></input>
                                 </S.InputSpan>
+                            </span>
+                        </>)}
 
+                        {tela == 3 && (<>
+                            <span className='linkEvento flex flex-col gap-4'>
                                 <S.InputSpan>
                                     <label htmlFor='link'>Link da localização do local:</label>
                                     <input type='text' name='link' placeholder='Link da localização'
                                     defaultValue={localidade.link}
                                     onChange={(e)=> setLocalidade(prev =>{ return {...prev, link: e.target.value}})}></input>
                                 </S.InputSpan>
-
-                            </span>
-
-                            <span className='linksDoEvento flex flex-col gap-4'>
                                 <span className="flex flex-col items-center overflow-y-scroll">
-                                    <p>Adicione também os links relacionados ao evento, por exemplo link para formulário de confirmação de presença, um website sobre o evento, post sobre evento nas redes sociais, etc... <i className="text-gray-700">{'(Opcional)'}</i></p>
-                                    {linksEvento.map(link =>(<>
+                                    <p>Você também pode adicionar outro links relacionados ao evento, por exemplo link para formulário de confirmação de presença, um website sobre o evento, post sobre evento nas redes sociais, etc... <i className="text-gray-700">{'(Opcional)'}</i></p>
+                                    {linksEvento.map(link =>(
                                             <NewLinkDoEvento key={link._id} linkEvento={link} setLinksEvento={setLinksEvento}/>
-                                                    </>))}
-                                    {linksEvento.length < 5 ? (
-                                        <S.Button_Secundario className='mt-2' type="button" onClick={()=>adicionarMaisLinks()}>{linksEvento ? 'Adicionar mais links' : 'Adicionar links'}</S.Button_Secundario>
-                                    ): (<p>{'Atingiu a quantidade máxima de links (4)'}</p>)}
+                                    ))}
                                 </span>
                             </span>
                         </>)}
-                        <span className='w-full flex flwx-row justify-center gap-x-2'>
+
+                        <span className='w-full flex flex-row justify-center gap-x-2'>
                             <S.MultiplastTelasIndicador $tela={tela == 1 ? "on" : "off"}/>
                             <S.MultiplastTelasIndicador $tela={tela == 2 ? "on" : 'off'}/>
+                            <S.MultiplastTelasIndicador $tela={tela == 3 ? "on" : 'off'}/>
                         </span>
-                        {tela == 1 && (
-                            <S.Button_Secundario type='button' onClick={()=>setTela(2)}>Próximo</S.Button_Secundario>
+                        {tela < 3 && (
+                            <S.Button_Secundario type='button' onClick={()=>setTela(tela + 1)}>Próximo</S.Button_Secundario>
                         )}
-                        {tela == 2 && (<>
-                            <S.Button_Secundario type='button' onClick={()=>setTela(1)}>Voltar</S.Button_Secundario>
+                        {tela > 1 && (
+                            <S.Button_Secundario type='button' onClick={()=>setTela(tela - 1)}>Voltar</S.Button_Secundario>
+                        )}
+                        {tela == 3 && (
                             <S.Button_Principal type="submit">Salvar evento</S.Button_Principal>
-                        </>
                         )}
                         <S.Button_Danger type="button" onClick={()=>cancelar()}>Cancelar</S.Button_Danger>
                     </form>

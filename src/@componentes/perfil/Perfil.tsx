@@ -166,16 +166,16 @@ export function Perfil(props : perfilProps){
 
     return(<>
     <ContextAuthProvider isLogged={props.isLogged}>
+        <div className="w-screen relative flex flex-col items-center mt-0">
         {deletandoConta && (
             <Modal_Loading content="Deletando conta"/>
         )}
         {modalConfirmarDeletar && (
             <ConfirmarDeletarConta confirmar={handleConfirmarDeletar}/>
         )}
-        <div className="w-screen h-screen relative flex flex-col items-center mt-0">
-            {eventoAberto && (<JanelaEvento evento={eventoAberto} fecharJanela={fecharJanelaEvento}/>)}
-            <ToastContainer/>
             <Header username={props.isLogged ? props.isLogged.username : null}/>
+        {eventoAberto && (<JanelaEvento evento={eventoAberto} fecharJanela={fecharJanelaEvento}/>)}
+        <ToastContainer/>
         {editarPerfil && (
             <S.ModalHolder>
                 <S.ModalContainer className='w-[85vw] md:w-[70vw]'>
