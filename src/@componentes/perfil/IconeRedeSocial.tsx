@@ -1,5 +1,5 @@
-import { FaInstagram, FaFacebookF, FaYoutube, FaSoundcloud, FaSpotify } from "react-icons/fa";
-import { CiGlobe } from "react-icons/ci";
+import { FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 interface iconRedeSocialProps {
     nome: string;
 }
@@ -11,15 +11,11 @@ export default function IconeRedeSocial(props: iconRedeSocialProps){
         case 'facebook':
             return (<FaFacebookF/>)
         break;
-        case 'youtube':
-            return (<FaYoutube/>)
+        case 'tiktok':
+            return (<FaTiktok />)
         break;
-        case 'soundcloud':
-            return (<FaSoundcloud/>)
-        break
-        case 'spotify':
-            return (<FaSpotify/>)
-        default:
-            return (<CiGlobe />)
+        case 'x':
+            return (<FaXTwitter />)
+        break;
 }       
 }

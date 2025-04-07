@@ -17,7 +17,7 @@ export default function Etapa_Detalhes(props: etapaDetahesProps){
         Instagram: '',
         Facebook: '',
         X: '',
-        Spotify: ''
+        Tiktok: ''
     })
     
 
@@ -48,27 +48,25 @@ export default function Etapa_Detalhes(props: etapaDetahesProps){
             onChange={(e)=> props.setDescricao(e.target.value)}></textarea>
         </span>
         <S.FormInput className='gap-2'>
-            <p>Adicione o link das suas redes sociais!</p>
-            {props.area !== 'artesanato/artes visuais' && (
-                <span className="spotify">
-                    <label htmlFor="spotify">Spotify</label>
-                    <input name="spotify" type="url" placeholder="Link do seu perfil do spotify"
-                    onChange={(e)=>setLinks(links => {links.Spotify = e.target.value; return links})}></input>
-                </span>
-            )}
+            <p>Adicione também o @nome de usuário das suas redes sociais!<br>{'(Não é obrigatório o preenchimento de todos os campos abaixo, porém é necessário que pelo menos 1 seja informado.)'}</br></p>
             <span className="instagram">
                 <label htmlFor="instagram">Instagram</label>
-                <input name="instagram" type="url" placeholder="Link do seu perfil do instagram"
+                <input name="instagram" type="text" placeholder="@ do seu perfil do instagram"
                 onChange={(e)=>setLinks(links => {links.Instagram = e.target.value; return links})}></input>
             </span>
             <span className="X">
                 <label htmlFor="X">X</label>
-                <input name="X" type="url" placeholder="Link do seu perfil do X"
+                <input name="X" type="text" placeholder="@ do seu perfil do X"
                 onChange={(e)=>setLinks(links => {links.X = e.target.value; return links})}></input>
+            </span>
+            <span className="tiktok">
+                <label htmlFor="tiktok">Tiktok</label>
+                <input name="tiktok" type="text" placeholder="@ do seu perfil do Tiktok"
+                onChange={(e)=>setLinks(links => {links.Tiktok = e.target.value; return links})}></input>
             </span>
             <span className="facebook">
                 <label htmlFor="facebook">Facebook</label>
-                <input name="facebook" type="url" placeholder="Link do seu perfil do facebook"
+                <input name="facebook" type="text" placeholder="@ do seu perfil do facebook"
                 onChange={(e)=>setLinks(links => {links.Facebook = e.target.value; return links})}></input>
             </span>
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}

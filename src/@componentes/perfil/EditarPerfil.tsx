@@ -36,10 +36,7 @@ export default function EditarPerfil(props: editarPerfilProps){
             Instagram: linksDoPerfil.find(item => item.nome == 'Instagram')?.link || '',
             Facebook: linksDoPerfil.find(item => item.nome == 'Facebook')?.link || '',
             X: linksDoPerfil.find(item => item.nome == 'X')?.link || '',
-            Spotify: linksDoPerfil.find(item => item.nome == 'Spotify')?.link || '',
-            Soundcloud: linksDoPerfil.find(item => item.nome == 'Soundcloud')?.link || '',
-            Youtube: linksDoPerfil.find(item => item.nome == 'Youtube')?.link || '',
-            LinkExterno: linksDoPerfil.find(item => item.nome == 'Link externo')?.link || ''
+            Tiktok: linksDoPerfil.find(item => item.nome == 'Tiktok')?.link || '',
         };
     });
     
@@ -133,8 +130,6 @@ export default function EditarPerfil(props: editarPerfilProps){
                                 <IconContext.Provider value={{size: "1rem"}}>
                                     <IconeRedeSocial nome={nome.toLowerCase()}/>
                                 </IconContext.Provider>
-                                <p className='ml-2'>{nome == 'LinkExterno' ? 'Link Externo' : nome}</p>
-                                <IconEditar/>
                             </S.Tag>
                         ))}
                     </div>

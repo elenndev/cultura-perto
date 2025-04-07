@@ -8,10 +8,7 @@ interface editarLinksPerfilProps{
         Instagram: string;
         Facebook: string;
         X: string;
-        Spotify: string;
-        Soundcloud: string;
-        Youtube: string;
-        LinkExterno: string;
+        Tiktok: string;
     }>>;
 }
 export default function EditarLinkPerfil(props: editarLinksPerfilProps){

@@ -23,6 +23,16 @@ export default function CriarCUser(props : criarContaProps) {
         e.preventDefault();
         setLoading(true)
         setError(""); 
+        const checarUsernameCaracteres = (username: string) =>{
+            const regex = /^[a-zA-Z0-9]+$/
+            return regex.test(username)
+        }
+
+        if(!checarUsernameCaracteres(username)){
+            setError("O nome de usuário deve ter no mínimo 5 caracteres e não deve conter simbolos especiais como espaço em branco, @, #, ^, etc...")
+            setLoading(false)
+            return 
+        }
 
         try{
             const reqChecarUsernameEmail = await axios.get(`${url}/api/user`, { params: { email, username } });
@@ -60,6 +70,8 @@ export default function CriarCUser(props : criarContaProps) {
                     <h1 className="text-2xl font-bold text-center mb-6 text-white">Criar uma nova conta</h1>
                     
                     <S.Form onSubmit={handleSubmit}>
+                        {error && <S.TextoErro><p>{error}</p></S.TextoErro>}
+
                         <S.FormInput>
                             <label htmlFor="username">
                                 Nome de usuario
@@ -68,9 +80,9 @@ export default function CriarCUser(props : criarContaProps) {
                                 type="username"
                                 id="username"
                                 name="username"
-                                minLength={3}
+                                minLength={5}
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={(e) => {setError("");setUsername(e.target.value)}}
                                 required/>
                         </S.FormInput>
 
@@ -117,7 +129,6 @@ export default function CriarCUser(props : criarContaProps) {
                         />
                     </S.FormInput>
 
-                    {error && <S.TextoErro><p>{error}</p></S.TextoErro>}
                     <div className="mb-4 mt-2 flex w-full justify-center">
                         <S.Button_Principal
                         type="submit"
