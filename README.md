@@ -25,15 +25,11 @@ O **Cultura Perto** é uma plataforma web que conecta artistas locais com morado
 
 ## 🌐 Deploy
 
-O projeto está disponível online [no link](https://vercel.com/).  
+O projeto está disponível online [no link](https://cultura-perto.vercel.app).  
 
 ## 📦 Rodar localmente
 
 1. Clone o repositório:
-
-```bash
-    git clone https://github.com/seu-usuario/cultura-aqui.git
-```
 
 2. Instale as dependências:
 ```bash
