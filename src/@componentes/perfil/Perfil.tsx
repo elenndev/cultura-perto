@@ -14,7 +14,6 @@ import Modal_Loading from "../modals/Modal_Loading";
 import ConfirmarDeletarConta from "../homepage/ConfirmarDeletarConta";
 import { Button_LogOut } from "../Button_LogOut";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { PerfilHeader as StyledPerfilHeader}  from "@/styles/StyledPerfil";
 import JanelaEvento from "./JanelaEvento";
 import { MdAccountCircle } from "react-icons/md";
@@ -37,7 +36,6 @@ export function Perfil(props : perfilProps){
     const [menu, setMenu] = useState(false)
     const [deletandoConta, setDeletandoConta] = useState(false)
     const  [modalConfirmarDeletar, setModalConfirmarDeletar] = useState(false)
-    const router = useRouter()
 
     function removerEvento(eventoId: string){
         //remove Evento da lista seja por erro na criação ou se o usuário deletou o evento
@@ -141,8 +139,7 @@ export function Perfil(props : perfilProps){
             deletarConta({
                 username,
                 handleSucesso: async () => {
-                    await signOut()
-                    router.push('/')
+                    await signOut({callbackUrl: '/'})
                 },
                 handleErro: () => {
                     setDeletandoConta(false)
