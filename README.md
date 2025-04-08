@@ -2,6 +2,9 @@
 
 O **Cultura Perto** é uma plataforma web que conecta artistas locais com moradores de suas cidades. Artistas podem criar perfis com suas especialidades, redes sociais e localização, enquanto visitantes podem buscar pelos artistas em sua cidade — nosso objetivo é **fortalecer a cultura local e incentivar a valorização dos artistas locais**.
 
+## 🌐 Deploy
+O projeto está disponível online [aqui!](https://cultura-perto.vercel.app).  
+
 ## 🚀 Funcionalidades
 
 - Cadastro de perfis de artistas com:
@@ -23,9 +26,7 @@ O **Cultura Perto** é uma plataforma web que conecta artistas locais com morado
 - [Nodemailer](https://nodemailer.com/about/)
 - [NextAuth.js](https://next-auth.js.org/)
 
-## 🌐 Deploy
 
-O projeto está disponível online [no link](https://cultura-perto.vercel.app).  
 
 ## 📦 Rodar localmente
 
