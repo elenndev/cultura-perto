@@ -161,7 +161,7 @@ export function Perfil(props : perfilProps){
 
     function copiarLinkUsername(e: React.MouseEvent<HTMLParagraphElement>){
         const texto = e.currentTarget.innerText
-        navigator.clipboard.writeText(texto).then(()=>{toast.info(`Copiado para área de transferência ${texto}`)})
+        navigator.clipboard.writeText(texto).then(()=>{toast.info(`Copiado para área de transferência`)})
     }
 
     return(<>
