@@ -159,7 +159,10 @@ export function Perfil(props : perfilProps){
         setEventoAberto(false)
     }
 
-    
+    function copiarLinkUsername(e: React.MouseEvent<HTMLParagraphElement>){
+        const texto = e.currentTarget.innerText
+        navigator.clipboard.writeText(texto).then(()=>{toast.info(`Copiado para área de transferência ${texto}`)})
+    }
 
     return(<>
     <ContextAuthProvider isLogged={props.isLogged}>
@@ -208,7 +211,7 @@ export function Perfil(props : perfilProps){
                                 <IconContext.Provider value={{size: "1rem" }}>
                                     <IconeRedeSocial nome={link.nome.toLowerCase()}/>
                                 </IconContext.Provider>
-                                <a target='_blank' href={link.link}>{link.nome}</a>
+                                <p className='cursor-pointer' onClick={copiarLinkUsername}>{link.link}</p>
                             </span>
                             ))}
                     </span>
@@ -216,9 +219,9 @@ export function Perfil(props : perfilProps){
             <Agenda salvarEvento={handleSalvarEvento} 
             eventos={eventos} deletarEvento={handleDeletarEvento}
             abrirJanelaDoEvento={abrirJanelaDoEvento}/>
-            <span className="flex flex-col items-center">
+            <span className="flex flex-col items-center max-w-[95%]">
                 <S.H2>Sobre</S.H2>
-                <p>{perfil.descricao}</p>
+                <p className='break-words whitespace-normal'>{perfil.descricao}</p>
             </span>
         </div>
     

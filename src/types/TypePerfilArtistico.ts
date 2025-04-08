@@ -14,7 +14,7 @@ export type TypePerfilArtistico = {
 }
 
 export type TypeLinksPerfil = {
-    nome: 'Spotify' | 'Instagram' | 'X' | 'Facebook' | 'Tiktok'; 
+    nome: 'Instagram' | 'X' | 'Facebook' | 'Tiktok'; 
     link: string;
 }
 

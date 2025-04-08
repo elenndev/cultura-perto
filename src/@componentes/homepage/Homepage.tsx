@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 
 
 export const Homepage = ({username} : {username: string | null} )=>{
-    const {buscarArtistas} = useHomepage()
+    const {buscarArtistas, listarTodos} = useHomepage()
     const [janelaFiltros, setJanelaFiltros] = useState(true)
     const [loading, setLoading] = useState(false)
     const [perfis, setPerfis] = useState<null | TypePerfilArtistico[]>(null)
@@ -49,6 +49,20 @@ export const Homepage = ({username} : {username: string | null} )=>{
         }
     }
 
+    async function handleListarTodos(){
+        setLoading(true)
+        setJanelaFiltros(false)
+        try{
+            const obterPerfis = await listarTodos()
+            setPerfis(obterPerfis)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        }catch(error){
+            toast.error("Problema durante a busca de perfis, por favor tente novamente")
+            setJanelaFiltros(true)
+        }finally{
+            setLoading(false)
+        }
+    }
 
     function limparPesquisa(){
         setPerfis(null)
@@ -66,7 +80,7 @@ export const Homepage = ({username} : {username: string | null} )=>{
                     <Header username={username}/>
                     {inicio ? (<Inicio buscar={buscar} cadastrarOuVerPerfil={cadastrarOuVerPerfil} isLogged={username ? true : false}/>) : (
                         <>
-                            {janelaFiltros && (<FiltrarBusca buscar={handleBuscar}/>)}
+                            {janelaFiltros && (<FiltrarBusca buscar={handleBuscar} listarTodos={handleListarTodos}/>)}
                             {perfis && perfis.length > 0 &&(<ListaArtistas artistas={perfis}/>)}
                             {perfis?.length == 0 && (
                                 <div className='h-full gap-y-2 mt-[5rem] flex flex-col justify-center items-center'>

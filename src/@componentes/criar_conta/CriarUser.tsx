@@ -109,7 +109,7 @@ export default function CriarCUser(props : criarContaProps) {
                         id="password"
                         name="password"
                         value={password}
-                        minLength={10}
+                        minLength={7}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         />

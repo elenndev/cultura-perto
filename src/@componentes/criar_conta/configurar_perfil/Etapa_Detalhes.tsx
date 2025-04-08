@@ -23,19 +23,25 @@ export default function Etapa_Detalhes(props: etapaDetahesProps){
 
     function finalizarDetalhes(){
         if(Object.values(links).some(link => link.trim() != '')){
+            const linksFormatados = Object.fromEntries(
+                Object.entries(links).map(([nome, link]) => [
+                nome,
+                typeof link === 'string' ? link.replace(/@/g, '').trim() : ''
+                ])
+            );
+
+            
             const linksFiltrados = Object.fromEntries(
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                Object.entries(links).filter(([_, link]) => link.trim() !== '')
+                Object.entries(linksFormatados).filter(([_, link]) => link.trim() !== '')
             )
-            
             const linksDoPerfil: TypeLinksPerfil[] | null = Object.entries(linksFiltrados)
                 .map(([nome, link]) => ({ nome: nome as TypeLinksPerfil["nome"], link }))
             
-
             props.handleFinalizarConfiguracaoPerfil(linksDoPerfil)
         } else {
-            toast.error('Por favor disponibilize ao menos um link')
-            return setError('Informar link')
+            toast.error('Por favor informe uma rede social')
+            return setError('Informar ao menos uma rede social')
         }
     }
 
@@ -48,7 +54,7 @@ export default function Etapa_Detalhes(props: etapaDetahesProps){
             onChange={(e)=> props.setDescricao(e.target.value)}></textarea>
         </span>
         <S.FormInput className='gap-2'>
-            <p>Adicione também o @nome de usuário das suas redes sociais!<br>{'(Não é obrigatório o preenchimento de todos os campos abaixo, porém é necessário que pelo menos 1 seja informado.)'}</br></p>
+            <p>Adicione também o @nome de usuário das suas redes sociais!<br></br>{'(Não é obrigatório o preenchimento de todos os campos abaixo, porém é necessário que pelo menos 1 seja informado.)'}</p>
             <span className="instagram">
                 <label htmlFor="instagram">Instagram</label>
                 <input name="instagram" type="text" placeholder="@ do seu perfil do instagram"

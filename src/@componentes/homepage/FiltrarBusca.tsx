@@ -8,9 +8,10 @@ import { GiMusicalNotes } from "react-icons/gi";
 import { IoIosColorPalette } from "react-icons/io";
 
 type filtrarBuscaProps = {
-    buscar: (filtros: {localidade: {cidade: string, estado: string}, arte: string[]}) => void
+    buscar: (filtros: {localidade: {cidade: string, estado: string}, arte: string[]}) => void;
+    listarTodos: ()=> void;
 }
-export const FiltrarBusca = ({buscar} : filtrarBuscaProps)=>{
+export const FiltrarBusca = ({buscar, listarTodos} : filtrarBuscaProps)=>{
     const [localidade, setLocalidade] = useState({cidade: '', estado: ''})
     const [selecionarArte, setSelecionarArte] = useState<string[]>([])
     const opcoes = ["Artesanato/Artes Visuais", "Cênica", "Música"]
@@ -45,6 +46,10 @@ export const FiltrarBusca = ({buscar} : filtrarBuscaProps)=>{
     return (
     
         <div className="flex w-full items-center justify-center flex-col h-full">
+            <span className='flex flex-col w-[90%] gap-y-2 items-center justify-center'>
+                <p>Você pode conferir a lista de todos os artistas ou buscar por localidade e área artística</p>
+                <S.Button_Principal onClick={()=>listarTodos()}>Ver todos os artistas</S.Button_Principal>
+            </span>
             <span className='flex w-fit items-center flex-col gap-y-3 mt-3 p-5 bg-[#2c3b4d] rounded-4xl shadow-2xl'>
                     <S.H1 className='text-center border-b-2 border-[#eee9df70] py-2'>Buscar artistas</S.H1>
                 <span className="localidade">

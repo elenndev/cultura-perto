@@ -19,7 +19,7 @@ export default function EditarLinkPerfil(props: editarLinksPerfilProps){
                 <input
                 name={link.nome}
                 type="text"
-                placeholder={`Adicionar link do seu perfil do ${link.nome}`}
+                placeholder={`Adicionar @nome de usuário do seu perfil do ${link.nome}`}
                 defaultValue={link.url}
                 onChange={(e) => {
                     props.setError("");

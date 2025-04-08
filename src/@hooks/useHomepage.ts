@@ -26,7 +26,21 @@ export function useHomepage(){
             throw new Error("Problemas na requisiçao para buscar os perfis")
         }
     }
+    async function listarTodos(){
+        try{
+            const req = await axios.get(`${url}/api/perfil/todos`,)
+
+            if(req.data.perfis){
+                return req.data.perfis as TypePerfilArtistico[]
+            } else {
+                throw new Error()
+            }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        }catch(error){
+            throw new Error("Problemas na requisiçao para buscar os perfis")
+        }
+    }
 
 
-    return {buscarArtistas}
+    return {buscarArtistas, listarTodos}
 }

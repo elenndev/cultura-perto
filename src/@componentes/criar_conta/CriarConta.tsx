@@ -56,10 +56,12 @@ export default function CriarConta(){
     }
 
     return(<>
-        <main className="h-full w-full flex flex-col items-center relative">
+        <div className="h-full w-full flex flex-col items-center relative">
             {modalLoadingAberto && (
                 <div className='absolute z-20 w-full h-full'>
-                <Modal_Loading content={modalLoadingAberto.content}/></div>)}
+                    <Modal_Loading content={modalLoadingAberto.content}/>
+                </div>
+            )}
             <ToastContainer/>
             <Header username={null}/>
             {!configurarDetalhes && (<>
@@ -69,6 +71,6 @@ export default function CriarConta(){
                 <ConfigurarPerfil registrarPerfil={registrarPerfil} username={novoUsuario.username}/>
             </>
                 )}
-        </main>
+        </div>
         </>)
 }

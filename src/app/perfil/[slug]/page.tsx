@@ -37,7 +37,8 @@ export default async function Page(props : {params: Params}) {
     return(<p>Perfil não encontrado</p>)
     }
     const session = await getSessionData()
-    const isLogged = session ? session.user as {id: string, username: string} : false
+    const user = session ? session.user as {id: string, username: string} : false
+    const isLogged = !user ? false : (user.username == params.slug ? user : false)
 
     return (<>
     <Suspense fallback={<p>Carregando perfil...</p>}>
