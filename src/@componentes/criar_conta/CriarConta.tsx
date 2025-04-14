@@ -6,8 +6,8 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import Header from "../Header";
 import Modal_Loading from "../modals/Modal_Loading";
-import CriarUser from "./CriarUser";
 import ConfigurarPerfil from "./configurar_perfil/ConfigurarPerfil";
+import CriarUser from "./CriarUser/CriarUser";
 
 export default function CriarConta(){
     const { registrarNovoUsuario } = useConta()
@@ -68,7 +68,7 @@ export default function CriarConta(){
                 <CriarUser irParaOsDetalhes={irParaOsDetalhes}/>
             </>)}
             {configurarDetalhes && novoUsuario && (<>
-                <ConfigurarPerfil registrarPerfil={registrarPerfil} username={novoUsuario.username}/>
+                <ConfigurarPerfil registrarPerfil={registrarPerfil} username={novoUsuario.username} email={novoUsuario.email}/>
             </>
                 )}
         </div>

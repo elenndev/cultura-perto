@@ -11,16 +11,16 @@ export async function POST(request: NextRequest){
 
         await connectMongoDB()
 
-        const eventoEditado = await PerfilArtisticoDB.findOneAndUpdate(
+        const perfilEditado = await PerfilArtisticoDB.findOneAndUpdate(
             { username },
             { $set: perfil },
             { new: true }
         )
 
-        if(eventoEditado){
+        if(perfilEditado){
             return NextResponse.json({updated: 200},{status: 200})
         } else {
-            return NextResponse.json({updated: 'Nenhum evento encontrado para fazer a atualização'}, {status: 500})
+            return NextResponse.json({updated: 'Nenhum Perfil encontrado para fazer a atualização'}, {status: 500})
         }
 
     }catch(error){

@@ -5,6 +5,7 @@ import { useState } from "react";
 import Header from "../Header";
 import * as S from '@/styles/StyledLogin'
 import Loader from "../Loader";
+import Link from "next/link";
 
 export default function Login() {
     const [emailOuUsername, setEmailOuUsername] = useState("")
@@ -82,9 +83,11 @@ export default function Login() {
                                 </div>
                             </S.Form>
 
-                            <div className="text-center mt-4">
-                            <a href='/criar-conta' className="font-semibold"
-                            >Criar uma nova conta</a>
+                            <div className="text-center flex flex-col mt-4">
+                            <Link href='/esqueci-senha' className="font-semibold"
+                            >Esqueci minha senha</Link>
+                            <Link href='/criar-conta' className="font-semibold"
+                            >Criar uma nova conta</Link>
                             </div>
                                             </>)}
                         </div>

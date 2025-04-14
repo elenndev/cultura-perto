@@ -2,7 +2,8 @@
 import { useState } from "react";
 import axios from "axios";
 import * as S from '@/styles/StyledLogin'
-import Loader from "../Loader";
+import Loader from "@/@componentes/Loader";
+import Link from "next/link";
 
 
 const url = process.env.NEXT_PUBLIC_APP_URL
@@ -28,8 +29,19 @@ export default function CriarCUser(props : criarContaProps) {
             return regex.test(username)
         }
 
+        const checarEmailCaracteres = (email: string) => {
+            if(email.includes(' ')){return false}
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            return regex.test(email)
+        }
+
         if(!checarUsernameCaracteres(username)){
             setError("O nome de usuário deve ter no mínimo 5 caracteres e não deve conter simbolos especiais como espaço em branco, @, #, ^, etc...")
+            setLoading(false)
+            return 
+        }
+        if(!checarEmailCaracteres(email)){
+            setError("Por favor informe um email válido, verifique se não há espaço em branco no inicio,no meio ou no fim do email")
             setLoading(false)
             return 
         }
@@ -138,8 +150,8 @@ export default function CriarCUser(props : criarContaProps) {
                     </S.Form>
 
                     <div className="text-center mt-4">
-                        <a href="/login"
-                        className="font-semibold">Já tem uma conta? Faça login</a>
+                        <Link href="/login"
+                        className="font-semibold">Já tem uma conta? Faça login</Link>
                     </div>
                 </>)}
 

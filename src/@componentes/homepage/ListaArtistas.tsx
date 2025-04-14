@@ -28,7 +28,7 @@ export default function ListaArtistas(props: listaArtistasProps){
                             </span>
                         <span className="z-20 flex flex-col justify-center">
                             <p className='text-[1.25rem] col-span-2'>{artista.nome}</p>
-                            <span className="flex flex-wrap gap-x-2">
+                            <span className="flex flex-wrap gap-2">
                                 <p className='bg-[#ffb162] rounded-3xl w-fit py-1 px-2 flex flex-wrap justify-center items-center'>{artista.localidade.cidade} - {artista.localidade.estado}</p>
                                 <span className='bg-[#ffb162] rounded-3xl py-1 px-2 flex flex-row items-center'>
                                     <p>{artista.area}</p>
